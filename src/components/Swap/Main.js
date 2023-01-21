@@ -2,7 +2,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import algosdk from "algosdk";
+import {Asset, TinymanMainnetClient} from '@tinymanorg/tinyman-js-sdk';
 import useSettings from '../../hooks/useSettings';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +34,9 @@ export default function Main(props) {
   const classes = useStyles();
 
   const client = new algosdk.Algodv2('','https://testnet-api.algonode.cloud','',{'user-agent':'algo-sdk'});
+  console.log(client);
+  const TinymanClient = new TinymanMainnetClient(client, props.accountAddress);
+//   console.log(TinymanClient);
 //   const TinymanClient = new TinymanMainnetClient(client,props.accountAddress);
   
   return (
