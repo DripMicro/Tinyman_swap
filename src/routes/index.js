@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { useRoutes, useLocation, Navigate } from 'react-router-dom';
 // layouts
 import MainLayout from '../layouts/main';
@@ -36,17 +36,19 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
+  const [accountAddress, setAccountAddress] = useState(null);
+
   return useRoutes([
     // Main Routes
     {
       path: '/',
-      element: <MainLayout />,
+      element: <MainLayout accountAddress = {accountAddress} setAccountAddress = {setAccountAddress} />,
       children: [
         { path: '/', element: <FiatPage /> },
         { path: '/fiat', element: <FiatPage /> },
         { path: '/invest', element: <PrivacyPage /> },
         { path: '/stake', element: <TermsPage /> },
-        { path: '/swap', element: <SwapPage /> },
+        { path: '/swap', element: <SwapPage accountAddress = {accountAddress}/> },
         { path: '/invest_detail', element: <InvestEquity /> },
         { path: '/team', element: <TeamPage /> },
         { path: '/ecosystem', element: <Ecosystem /> },

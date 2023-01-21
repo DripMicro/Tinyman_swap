@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import { red } from '@material-ui/core/colors';
-import useSettings from '../hooks/useSettings';
-import Main from './Swap/Main';
+import algosdk from "algosdk";
+import useSettings from '../../hooks/useSettings';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,20 +24,19 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)'
   },
-  avatar: {
-    backgroundColor: red[500]
-  }
 }));
 
 
-export default function CardSwap(props) {
+export default function Main(props) {
   const { themeMode } = useSettings();
   const classes = useStyles();
+
+  const client = new algosdk.Algodv2('','https://testnet-api.algonode.cloud','',{'user-agent':'algo-sdk'});
+//   const TinymanClient = new TinymanMainnetClient(client,props.accountAddress);
+  
   return (
-    <Card className={classes.root} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
-      <div className="widget_parent">
-        {props.accountAddress != null ? <Main accountAddress = {props.accountAddress}/> : ""}
-      </div>
-    </Card>
+   <div>
+    {props.accountAddress}
+   </div>
   );
 }

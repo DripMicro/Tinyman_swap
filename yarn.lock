@@ -5250,10 +5250,26 @@ algo-msgpack-with-bigint@^2.1.1:
   resolved "https://registry.yarnpkg.com/algo-msgpack-with-bigint/-/algo-msgpack-with-bigint-2.1.1.tgz#38bb717220525b3ff42232eefdcd9efb9ad405d6"
   integrity sha512-F1tGh056XczEaEAqu7s+hlZUDWwOBT70Eq0lfMpBP2YguSQVyxRbprLq5rELXKQOyOaixTWYhMeMQMzP0U5FoQ==
 
-algosdk@^1.24.0:
-  version "1.24.0"
-  resolved "https://registry.yarnpkg.com/algosdk/-/algosdk-1.24.0.tgz#9f4e2fdf94d100561b2251c0a6591047fe0e2556"
-  integrity sha512-Q+rOpHTyn92OaL1ta0jEGz8fUQnfGiH2u5wkHj4phy5YKC9mkUrXc1+3Qk3v5fsttTV6pZlYPpzvBTNAlgIAyQ==
+algosdk@^1.12.0:
+  version "1.24.1"
+  resolved "https://registry.yarnpkg.com/algosdk/-/algosdk-1.24.1.tgz#afc4102457ae0c38a32de6b84f4d713aedfc9e89"
+  integrity sha512-9moZxdqeJ6GdE4N6fA/GlUP4LrbLZMYcYkt141J4Ss68OfEgH9qW0wBuZ3ZOKEx/xjc5bg7mLP2Gjg7nwrkmww==
+  dependencies:
+    algo-msgpack-with-bigint "^2.1.1"
+    buffer "^6.0.2"
+    cross-fetch "^3.1.5"
+    hi-base32 "^0.5.1"
+    js-sha256 "^0.9.0"
+    js-sha3 "^0.8.0"
+    js-sha512 "^0.8.0"
+    json-bigint "^1.0.0"
+    tweetnacl "^1.0.3"
+    vlq "^2.0.4"
+
+algosdk@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/algosdk/-/algosdk-2.0.0.tgz#d6816c50f36d3454b8c69eaf260149237e500bcb"
+  integrity sha512-OaswZBd7M6lm+PUevszRn5Ujq0iXHZBdCz+Yb4yIdwwcSN7cbhsba1DllXvkuyGCEAFIbSJLoOW1+1/at0oJfw==
   dependencies:
     algo-msgpack-with-bigint "^2.1.1"
     buffer "^6.0.2"
@@ -16270,6 +16286,13 @@ tiny-warning@^1.0.2:
   version "1.0.3"
   resolved "https://registry.npmjs.org/tiny-warning/-/tiny-warning-1.0.3.tgz"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
+
+tinyman-ts-sdk@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/tinyman-ts-sdk/-/tinyman-ts-sdk-1.0.1.tgz#5ff7015c0aa58e1882a75102556779d6a38cd0dd"
+  integrity sha512-uaZ5wEptwpPAqNeqOOrI6JmW6BVGi3kaZUR9T5s3ouM6snzzF9LLW8T+lkW4BXXjiy6r1xEAIQO6bQhz/ypUEQ==
+  dependencies:
+    algosdk "^1.12.0"
 
 tinyqueue@^2.0.3:
   version "2.0.3"

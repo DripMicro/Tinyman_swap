@@ -46,7 +46,7 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function MainNavbar() {
+export default function MainNavbar(props) {
   const { onChangeMode, themeMode } = useSettings();
   // const isOffset = useOffSetTop(100);
   const isOffset = false;
@@ -97,7 +97,7 @@ export default function MainNavbar() {
             />
           </MHidden>
           <Box sx={{ flexGrow: 1 }} />
-          <Account />
+          <Account  accountAddress = {props.accountAddress} setAccountAddress = {props.setAccountAddress} />
           
 
           <Box

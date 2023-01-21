@@ -21,11 +21,11 @@ const ContentStyle = styled('div')(() => ({
 
 // ----------------------------------------------------------------------
 
-export default function SwapPage() {
+export default function SwapPage(props) {
   return (
     <RootStyle title="App | Backed Capital" id="move_top">
       <ContentStyle>
-          <Swap />
+          <Swap accountAddress = {props.accountAddress}/>
       </ContentStyle>
     </RootStyle>
   );

@@ -21,7 +21,7 @@ const Account = props => {
                 } else {
                   const results = {};
 
-                  for (let attribute of attributes) {
+                  for (const attribute of attributes) {
                     const { Name, Value } = attribute;
                     results[Name] = Value;
                   }

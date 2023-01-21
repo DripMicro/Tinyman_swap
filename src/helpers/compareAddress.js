@@ -1,3 +1,1 @@
-export const compareAddress = (a, b) => {
-  return a.toString().toLowerCase() == b.toString().toLowerCase();
-};
+export const compareAddress = (a, b) => a.toString().toLowerCase() == b.toString().toLowerCase();

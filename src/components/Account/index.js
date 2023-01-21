@@ -88,7 +88,7 @@ const styles = {
   }
 };
 
-export default function Account() {
+export default function Account(props) {
   const { themeMode } = useSettings();
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -125,7 +125,9 @@ export default function Account() {
     }
   ];
 
-  const [accountAddress, setAccountAddress] = useState(null);
+  const {accountAddress, setAccountAddress } = props;
+
+  // const [accountAddress, setAccountAddress] = useState(null);
   const isConnectedToPeraWallet = !!accountAddress;
   const peraWallet = new PeraWalletConnect();
 
