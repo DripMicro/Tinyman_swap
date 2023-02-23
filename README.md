@@ -15,3 +15,8 @@ https://app.tinyman.org/#/swap?asset_in=0&asset_out=31566704
 https://perawallet.github.io/pera-demo-dapp/
 https://docs.perawallet.app/references/pera-connect
 https://github.com/tinymanorg/tinyman-js-sdk
+
+
+
+https://dev.to/sithumonline/react-17-jsx-react-scripts-with-typescript-30ap
+https://github.com/staylor/react-helmet-async/issues/92

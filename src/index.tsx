@@ -64,6 +64,8 @@ import '@fontsource/nunito/700.css';
 import '@fontsource/nunito/800.css';
 import '@fontsource/nunito/900.css';
 
+const helmetContext = {};
+
 // ----------------------------------------------------------------------
 ReactDOM.render(
   <StrictMode>
