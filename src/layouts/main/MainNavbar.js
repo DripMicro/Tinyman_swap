@@ -97,7 +97,7 @@ export default function MainNavbar() {
             />
           </MHidden>
           <Box sx={{ flexGrow: 1 }} />
-          <Account width="auto" />
+          <Account />
           
 
           <Box

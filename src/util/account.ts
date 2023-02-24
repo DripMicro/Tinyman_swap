@@ -18,14 +18,14 @@ export async function getAccount(): Promise<Account> {
     console.log(`✅ Account generated: ${account.addr}`);
     console.log(`✅ Account data saved to: ${ACCOUNT_FILENAME}`);
 
-    writeFileSync(ACCOUNT_FILENAME, JSON.stringify(account));
+    // writeFileSync(ACCOUNT_FILENAME, JSON.stringify(account));
   }
 
-  try {
-    await assertAccountHasBalance(account.addr);
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   await assertAccountHasBalance(account.addr);
+  // } catch (error) {
+  //   console.log(error);
+  // }
 
   return account;
 }

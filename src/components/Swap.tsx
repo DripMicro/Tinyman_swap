@@ -14,7 +14,7 @@ import { blue } from '@material-ui/core/colors';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
 import useSettings from '../hooks/useSettings';
-// import { fixedInput } from '../operation/swap/fixedInput';
+import { fixedInput } from '../operation/swap/fixedInput';
 import Account from './Account';
 
 const tokenlist = [
@@ -103,7 +103,7 @@ export default function PeraWalletConnection() {
     setAssetAmount1(event.target.value);
     console.log(selectedAsset1TokenNumber);
     console.log(selectedAsset2TokenNumber);
-    // await fixedInput({ asset_1: selectedAsset1TokenNumber, asset_2: selectedAsset2TokenNumber });
+    await fixedInput({ asset_1: selectedAsset1TokenNumber, asset_2: selectedAsset2TokenNumber });
   };
 
   const handleAsset2AmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {

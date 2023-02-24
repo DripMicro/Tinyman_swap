@@ -53,5 +53,5 @@ export async function bootstrapPool({
   console.log('✅ Pool bootstrapped!');
   console.log(`✅ Pool address: ${poolAddress}`);
   console.log(`✅ Pool token ID: ${bootstrapExecutionResponse.poolTokenID}`);
-  // console.log('✅ See pool account on AlgoExplorer: ' + `https://testnet.algoexplorer.io/address/${poolAddress}`);
+  console.log('✅ See pool account on AlgoExplorer: ' + `https://testnet.algoexplorer.io/address/${poolAddress}`);
 }
