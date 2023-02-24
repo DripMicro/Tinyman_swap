@@ -10,8 +10,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import Input from '@material-ui/core/Input';
-import TextField from '@material-ui/core/TextField';
 import { blue } from '@material-ui/core/colors';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
@@ -53,7 +51,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '6px'
   },
   smallIcon: {
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop: '0px'
+  },
+  connectButton: {
+    marginTop: '30px'
   }
 }));
 
@@ -178,7 +180,7 @@ export default function PeraWalletConnection() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item xs className={classes.smallIcon}>
           <IconButton aria-label="swap">
             <SwapVertIcon fontSize="medium" />
@@ -234,6 +236,32 @@ export default function PeraWalletConnection() {
             onChange={handleAsset2AmountChange}
             style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
           />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <Button
+            variant="contained"
+            className={classes.connectButton}
+            sx={{
+              fontSize: { xs: '10px', md: '12px' },
+              fontFamily: 'Poppins',
+              width: { xs: '100%', md: '100%' },
+              fontWeight: 500,
+              borderRadius: '8px',
+              boxShadow: 'none',
+              background: themeMode === 'dark' ? 'white' : 'black',
+              color: themeMode === 'dark' ? 'black' : 'white',
+              padding: '10px 10px',
+              '&:hover': {
+                background: themeMode === 'dark' ? 'white' : 'black',
+                opacity: '80%'
+              }
+            }}
+          >
+            Connect Wallet
+          </Button>
         </Grid>
       </Grid>
     </div>
