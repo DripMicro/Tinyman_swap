@@ -14,8 +14,8 @@ import { blue } from '@material-ui/core/colors';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
 import useSettings from '../hooks/useSettings';
-
-// import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
+// import { fixedInput } from '../operation/swap/fixedInput';
+import Account from './Account';
 
 const tokenlist = [
   { tokenName: 'Algorand', tokenNumber: 0, tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png' },
@@ -99,8 +99,11 @@ export default function PeraWalletConnection() {
     setSelectedAsset2TokenImage(image);
   };
 
-  const handleAsset1AmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAsset1AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount1(event.target.value);
+    console.log(selectedAsset1TokenNumber);
+    console.log(selectedAsset2TokenNumber);
+    // await fixedInput({ asset_1: selectedAsset1TokenNumber, asset_2: selectedAsset2TokenNumber });
   };
 
   const handleAsset2AmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +111,6 @@ export default function PeraWalletConnection() {
   };
 
   //   const isConnectedToPeraWallet = !!accountAddress;
-
   //   const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
   //     setInputValue(event.target.value);
   //     console.log(event.target.value);
@@ -240,28 +242,8 @@ export default function PeraWalletConnection() {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs>
-          <Button
-            variant="contained"
-            className={classes.connectButton}
-            sx={{
-              fontSize: { xs: '10px', md: '12px' },
-              fontFamily: 'Poppins',
-              width: { xs: '100%', md: '100%' },
-              fontWeight: 500,
-              borderRadius: '8px',
-              boxShadow: 'none',
-              background: themeMode === 'dark' ? 'white' : 'black',
-              color: themeMode === 'dark' ? 'black' : 'white',
-              padding: '10px 10px',
-              '&:hover': {
-                background: themeMode === 'dark' ? 'white' : 'black',
-                opacity: '80%'
-              }
-            }}
-          >
-            Connect Wallet
-          </Button>
+        <Grid item xs className={classes.connectButton}>
+          <Account width="100%" />
         </Grid>
       </Grid>
     </div>

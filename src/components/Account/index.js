@@ -88,7 +88,8 @@ const styles = {
   }
 };
 
-export default function Account() {
+export default function Account(props) {
+  const buttonWidthStyle = props.width;
   const { themeMode } = useSettings();
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -254,7 +255,7 @@ export default function Account() {
               sx={{
                 fontSize: { xs: '10px', md: '12px' },
                 fontFamily: 'Poppins',
-                width: { xs: 'auto', md: 'auto' },
+                width: { xs: buttonWidthStyle, md: buttonWidthStyle },
                 fontWeight: 500,
                 borderRadius: '8px',
                 boxShadow: 'none',

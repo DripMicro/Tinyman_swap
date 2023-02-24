@@ -60,6 +60,7 @@
     "react/jsx-key": 1,
     "react-hooks/rules-of-hooks": 2,
     "no-empty-function": "off",
+    "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/no-empty-function": "off",
     "no-unused-vars": [
       1,
@@ -85,7 +86,8 @@
         "ts": "never",
         "tsx": "never"
       }
-   ]
+   ],
+   "camelcase": ["error"]
   },
   "settings": {
     "import/resolver": {
@@ -95,4 +97,12 @@
       "caseSensitive": false
     }
   },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "rules": {
+        "camelcase": ["off"]
+      }
+    }
+  ],
 }
