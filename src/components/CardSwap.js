@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import { red } from '@material-ui/core/colors';
 import useSettings from '../hooks/useSettings';
-
+import Swap from './Swap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +38,7 @@ export default function CardSwap() {
   return (
     <Card className={classes.root} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
       <div className="widget_parent">
-        <stargate-widget theme={ themeMode === "dark" ? "dark" : "light" }/>
+        <Swap />
       </div>
     </Card>
   );

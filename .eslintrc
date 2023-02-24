@@ -19,7 +19,7 @@
     "react-hooks",
     "@typescript-eslint"
   ],
-  "parser": "@babel/eslint-parser",
+  "parser": "",
   "parserOptions": {
     "ecmaVersion": 8,
     "requireConfigFile": false,
