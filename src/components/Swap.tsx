@@ -22,8 +22,24 @@ import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
 
 const tokenlist = [
-  { tokenName: 'Algorand', tokenNumber: 0, tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png' },
-  { tokenName: 'USDC', tokenNumber: 31566704, tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png' }
+  {
+    tokenName: 'Algorand',
+    tokenNumber: 0,
+    tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png',
+    tokenUnitName: 'JC'
+  },
+  {
+    tokenName: 'USDC',
+    tokenNumber: 31566704,
+    tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
+    tokenUnitName: 'USDC'
+  },
+  {
+    tokenName: 'Chips',
+    tokenNumber: 388592191,
+    tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
+    tokenUnitName: 'Chip'
+  }
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -71,11 +87,12 @@ export default function PeraWalletConnection() {
 
   const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState(tokenlist[0].tokenName);
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
-  const [selectedAsset1TokenImage, setSelectedAsset1TokenImage] = useState(tokenlist[0].tokenImage);
+  const [selectedAsset1TokenUnitName, setSelectedAsset1TokenUnitName] = useState(tokenlist[0].tokenUnitName);
 
   const [selectedAsset2TokenName, setSelectedAsset2TokenName] = useState(tokenlist[1].tokenName);
   const [selectedAsset2TokenNumber, setSelectedAsset2TokenNumber] = useState(tokenlist[1].tokenNumber);
-  const [selectedAsset2TokenImage, setSelectedAsset2TokenImage] = useState(tokenlist[1].tokenImage);
+  const [selectedAsset2TokenUnitName, setSelectedAsset2TokenUnitName] = useState(tokenlist[1].tokenUnitName);
+
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
 
@@ -90,18 +107,18 @@ export default function PeraWalletConnection() {
     setOpenAsset2(true);
   };
 
-  const asset1HandleClose = (name: string, num: number, image: string) => {
+  const asset1HandleClose = (name: string, num: number, unit: string) => {
     setOpenAsset1(false);
     setSelectedAsset1TokenName(name);
     setSelectedAsset1TokenNumber(num);
-    setSelectedAsset1TokenImage(image);
+    setSelectedAsset1TokenUnitName(unit);
   };
 
-  const asset2HandleClose = (name: string, num: number, image: string) => {
+  const asset2HandleClose = (name: string, num: number, unit: string) => {
     setOpenAsset2(false);
     setSelectedAsset2TokenName(name);
     setSelectedAsset2TokenNumber(num);
-    setSelectedAsset2TokenImage(image);
+    setSelectedAsset2TokenUnitName(unit);
   };
 
   const handleAsset1AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,37 +156,47 @@ export default function PeraWalletConnection() {
       {/* Asset1 */}
       <Grid container className={classes.assets} spacing={3}>
         <Grid item xs>
-          <Button
-            onClick={handleClickOpenAsset1}
-            variant="contained"
-            sx={{
-              fontFamily: 'Poppins',
-              width: { xs: 'auto', md: 'auto' },
-              fontWeight: 500,
-              borderRadius: '8px',
-              boxShadow: 'none',
-              background: themeMode === 'dark' ? '#232323' : 'white',
-              color: themeMode === 'dark' ? 'white' : '#232323',
-              padding: '0px',
-              '&:hover': {
-                background: themeMode === 'dark' ? '#232323' : 'white',
-                opacity: '90%'
-              }
-            }}
-          >
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <img src={selectedAsset1TokenImage} alt={selectedAsset1TokenName} />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={selectedAsset1TokenName} />
-            </ListItem>
-          </Button>
+          <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset1}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
+              <Box display="flex" alignItems="center">
+                <Box
+                  component="img"
+                  src={`https://asa-list.tinyman.org/assets/${selectedAsset1TokenNumber}/icon.png`}
+                  alt="Asset logo"
+                  sx={{
+                    mr: 2,
+                    width: 40,
+                    height: 40
+                  }}
+                />
+                <Box>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="subtitle1" noWrap>
+                      {selectedAsset1TokenName}
+                    </Typography>
+                    <Tooltip title="Trusted asset by Pera" arrow>
+                      <Box
+                        component="img"
+                        src="/static/token/trust.svg"
+                        alt="Asset logo"
+                        sx={{
+                          width: 16,
+                          height: 16
+                        }}
+                      />
+                    </Tooltip>
+                  </Box>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                    ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </MenuItem>
           <SelectTokenDialog
             selectedAssetTokenName={selectedAsset1TokenName}
             selectedAssetTokenNumber={selectedAsset1TokenNumber}
-            selectedAssetTokenImage={selectedAsset1TokenImage}
+            selectedAssetTokenUnitName={selectedAsset1TokenUnitName}
             open={openAsset1}
             onClose={asset1HandleClose}
           />
@@ -198,63 +225,63 @@ export default function PeraWalletConnection() {
       {/* Asset2 */}
       <Grid container className={classes.assets} spacing={3}>
         <Grid item xs>
-          <Button
-            onClick={handleClickOpenAsset2}
-            variant="contained"
-            sx={{
-              fontFamily: 'Poppins',
-              width: { xs: 'auto', md: 'auto' },
-              fontWeight: 500,
-              borderRadius: '8px',
-              boxShadow: 'none',
-              background: themeMode === 'dark' ? '#232323' : 'white',
-              color: themeMode === 'dark' ? 'white' : '#232323',
-              padding: '0px',
-              '&:hover': {
-                background: themeMode === 'dark' ? '#232323' : 'white',
-                opacity: '90%'
-              }
-            }}
-          >
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <img src={selectedAsset2TokenImage} alt={selectedAsset2TokenName} />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={selectedAsset2TokenName} />
-            </ListItem>
-          </Button>
+          <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset2}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
+              <Box display="flex" alignItems="center">
+                <Box
+                  component="img"
+                  src={`https://asa-list.tinyman.org/assets/${selectedAsset2TokenNumber}/icon.png`}
+                  alt="Asset logo"
+                  sx={{
+                    mr: 2,
+                    width: 40,
+                    height: 40
+                  }}
+                />
+                <Box>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="subtitle1" noWrap>
+                      {selectedAsset2TokenName}
+                    </Typography>
+                    <Tooltip title="Trusted asset by Pera" arrow>
+                      <Box
+                        component="img"
+                        src="/static/token/trust.svg"
+                        alt="Asset logo"
+                        sx={{
+                          width: 16,
+                          height: 16
+                        }}
+                      />
+                    </Tooltip>
+                  </Box>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                    ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </MenuItem>
           <SelectTokenDialog
             selectedAssetTokenName={selectedAsset2TokenName}
             selectedAssetTokenNumber={selectedAsset2TokenNumber}
-            selectedAssetTokenImage={selectedAsset2TokenImage}
+            selectedAssetTokenUnitName={selectedAsset2TokenUnitName}
             open={openAsset2}
             onClose={asset2HandleClose}
           />
         </Grid>
         <Grid item xs>
-          <Box display="flex" alignItems="flex-end" justifyContent="center" flexDirection="column">
-            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-              0
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-              ≈ $0
-            </Typography>
-          </Box>
           <input
             type="number"
             pattern="[0-9]*"
             className={classes.assetInput}
             placeholder="0.00"
-            value={assetAmount2}
-            onChange={handleAsset2AmountChange}
+            value={assetAmount1}
+            onChange={handleAsset1AmountChange}
             style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
           />
         </Grid>
       </Grid>
-
-      <TokenTemplate />
 
       <Grid container spacing={3}>
         <Grid item xs className={classes.connectButton}>
@@ -269,23 +296,21 @@ export interface SelectTokenDialogProps {
   open: boolean;
   selectedAssetTokenName: string;
   selectedAssetTokenNumber: number;
-  selectedAssetTokenImage: string;
-  onClose: (name: string, num: number, image: string) => void;
+  selectedAssetTokenUnitName: string;
+  onClose: (name: string, num: number, unit: string) => void;
 }
 
 function SelectTokenDialog(props: SelectTokenDialogProps) {
   const classes = useStyles();
-  const { onClose, selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenImage, open } = props;
-  const [balanceList, setBalanceList] = useState<
-    Array<{ params: any; tokenName: string; tokenNumber: number; tokenImage: string }>
-  >([]);
+  const { onClose, selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenUnitName, open } = props;
+  const [balanceList, setBalanceList] = useState<Array<{ params: any; tokenName: string; tokenNumber: number }>>([]);
 
   const handleClose = () => {
-    onClose(selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenImage);
+    onClose(selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenUnitName);
   };
 
-  const handleListItemClick = (name: string, num: number, image: string) => {
-    onClose(name, num, image);
+  const handleListItemClick = (name: string, num: number, unit: string) => {
+    onClose(name, num, unit);
   };
 
   const handleAssets = async () => {
@@ -312,12 +337,16 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
       <DialogContent>
         <List>
           {balanceList.map((item: any) => (
-            <MenuItem key={item['asset-id']} sx={{ typography: 'body2', py: 1, px: 2.5 }}>
+            <MenuItem
+              key={item['asset-id']}
+              sx={{ typography: 'body2', py: 1, px: 2.5 }}
+              onClick={() => handleListItemClick(item.tokenName, item.tokenNumber, item.params['unit-name'])}
+            >
               <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
                 <Box display="flex" alignItems="center">
                   <Box
                     component="img"
-                    src={item.tokenImage}
+                    src={`https://asa-list.tinyman.org/assets/${item.tokenNumber}/icon.png`}
                     alt="Asset logo"
                     sx={{
                       mr: 2,
@@ -343,7 +372,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                       </Tooltip>
                     </Box>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      ${item.params['unit-name']} - {item['asset-id']}
+                      ${item.params['unit-name']}
                     </Typography>
                   </Box>
                 </Box>
