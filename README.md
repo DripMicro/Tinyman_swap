@@ -22,3 +22,5 @@ https://dev.to/sithumonline/react-17-jsx-react-scripts-with-typescript-30ap
 https://github.com/staylor/react-helmet-async/issues/92
 
 https://mainnet.analytics.tinyman.org/api/v1/assets/prices/
+
+@tinymanorg/- > module delete
