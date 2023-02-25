@@ -8,7 +8,19 @@ import signerWithSecretKey from '../../util/initiatorSigner';
  * Executes a swap with a fixed input amount
  * (Input amount is entered by the user, output amount is to be calculated by the SDK)
  */
-export async function fixedInput({ asset_1, asset_2 }: { asset_1: number; asset_2: number }) {
+export async function fixedInput({
+  asset_1,
+  asset_2,
+  amount,
+  assetInDecimal,
+  assetOutDecimal
+}: {
+  asset_1: number;
+  asset_2: number;
+  amount: string;
+  assetInDecimal: number;
+  assetOutDecimal: number;
+}) {
   const pool = await poolUtils.v2.getPoolInfo({
     network: 'mainnet' as SupportedNetwork,
     client: algodClient,
@@ -24,8 +36,8 @@ export async function fixedInput({ asset_1, asset_2 }: { asset_1: number; asset_
   const fixedInputSwapQuote = Swap.v2.getQuote(
     SwapType.FixedInput,
     pool,
-    { id: pool.asset1ID, amount: 1_000_000 },
-    { assetIn: 6, assetOut: 6 }
+    { id: pool.asset1ID, amount: Number(amount) * 10 ** assetInDecimal },
+    { assetIn: assetInDecimal, assetOut: assetOutDecimal }
   );
   const assetIn = {
     id: fixedInputSwapQuote.assetInID,
@@ -36,10 +48,7 @@ export async function fixedInput({ asset_1, asset_2 }: { asset_1: number; asset_
     amount: fixedInputSwapQuote.assetOutAmount
   };
 
-  console.log(fixedInputSwapQuote.assetInID);
-  console.log(fixedInputSwapQuote.assetInAmount);
-  console.log(fixedInputSwapQuote.assetOutID);
-  console.log(fixedInputSwapQuote.assetOutAmount);
+  return assetOut.amount;
 
   // const fixedInputSwapTxns = await Swap.v2.generateTxns({
   //   client: algodClient,
