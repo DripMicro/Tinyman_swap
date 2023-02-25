@@ -95,6 +95,8 @@ export default function PeraWalletConnection() {
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
 
+  const [accountAddress, setAccountAddress] = useState('');
+
   //   const [accountAddress, setAccountAddress] = useState<string | null>(null);
   //   const [inputValue, setInputValue] = useState('');
 
@@ -340,7 +342,31 @@ export default function PeraWalletConnection() {
 
       <Grid container spacing={3}>
         <Grid item xs className={classes.connectButton}>
-          <Account width="100%" />
+          {accountAddress.length > 0 ? (
+            <Button
+              variant="contained"
+              className="bto"
+              sx={{
+                fontSize: { xs: '10px', md: '12px' },
+                fontFamily: 'Poppins',
+                width: { xs: '100%', md: '100%' },
+                fontWeight: 500,
+                borderRadius: '8px',
+                boxShadow: 'none',
+                background: themeMode === 'dark' ? 'white' : 'black',
+                color: themeMode === 'dark' ? 'black' : 'white',
+                padding: '8px 10px',
+                '&:hover': {
+                  background: themeMode === 'dark' ? 'white' : 'black',
+                  opacity: '80%'
+                }
+              }}
+            >
+              Swap
+            </Button>
+          ) : (
+            <Account width="100%" setAccountAddress={setAccountAddress} />
+          )}
         </Grid>
       </Grid>
     </div>

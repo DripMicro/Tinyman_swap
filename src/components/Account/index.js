@@ -90,6 +90,7 @@ const styles = {
 
 export default function Account(props) {
   const buttonWidthStyle = props.width;
+  const setAccountAddressSwap = props.setAccountAddress;
   const { themeMode } = useSettings();
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -163,6 +164,7 @@ export default function Account(props) {
         handleSetLog('Connected to Pera Wallet');
         if (accounts.length) {
           setAccountAddress(accounts[0]);
+          setAccountAddressSwap(accounts[0]);
         }
       })
       .catch((e) => console.log(e));
@@ -175,6 +177,7 @@ export default function Account(props) {
         peraWallet.connector.on('disconnect', peraWalletDisconnect);
         handleSetLog('Connected to Pera Wallet');
         setAccountAddress(newAccounts[0]);
+        setAccountAddressSwap(newAccounts[0]);
       })
       .catch((error) => {
         if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {
