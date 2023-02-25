@@ -33,6 +33,17 @@ export async function fixedInput({
    * Swap.getQuote method, which will return the best quote (highest rate)
    * after checking both v1 and v2
    */
+
+  if (asset_1 === 0 || asset_2 === 0) {
+    const fixedOutputSwapQuote = Swap.v2.getQuote(
+      SwapType.FixedInput,
+      pool,
+      { id: pool.asset2ID, amount: Number(amount) * 10 ** assetInDecimal },
+      { assetIn: assetInDecimal, assetOut: assetOutDecimal }
+    );
+    return fixedOutputSwapQuote.assetOutAmount;
+  }
+
   const fixedInputSwapQuote = Swap.v2.getQuote(
     SwapType.FixedInput,
     pool,

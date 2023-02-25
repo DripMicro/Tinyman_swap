@@ -20,46 +20,22 @@ import Account from './Account';
 
 const tokenlist = [
   {
-    tokenName: 'Algorand',
-    tokenNumber: 0,
-    tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png',
-    tokenUnitName: 'JC',
-    tokenDecimal: 6
+    tokenNumber: 0
   },
   {
-    tokenName: 'USDC',
-    tokenNumber: 31566704,
-    tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
-    tokenUnitName: 'USDC',
-    tokenDecimal: 6
+    tokenNumber: 31566704
   },
   {
-    tokenName: 'Chips',
-    tokenNumber: 388592191,
-    tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
-    tokenUnitName: 'Chip',
-    tokenDecimal: 1
+    tokenNumber: 388592191
   },
   {
-    tokenName: '',
-    tokenNumber: 793124631,
-    tokenImage: '',
-    tokenUnitName: '',
-    tokenDecimal: 0
+    tokenNumber: 793124631
   },
   {
-    tokenName: '',
-    tokenNumber: 571576867,
-    tokenImage: '',
-    tokenUnitName: '',
-    tokenDecimal: 0
+    tokenNumber: 571576867
   },
   {
-    tokenName: '',
-    tokenNumber: 226701642,
-    tokenImage: '',
-    tokenUnitName: '',
-    tokenDecimal: 0
+    tokenNumber: 226701642
   }
 ];
 
@@ -106,15 +82,15 @@ export default function PeraWalletConnection() {
   const [openAsset1, setOpenAsset1] = useState(false);
   const [openAsset2, setOpenAsset2] = useState(false);
 
-  const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState(tokenlist[0].tokenName);
+  const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState('Algorand');
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
-  const [selectedAsset1TokenUnitName, setSelectedAsset1TokenUnitName] = useState(tokenlist[0].tokenUnitName);
-  const [selectedAsset1TokenDecimal, setSelectedAsset1TokenDecimal] = useState(tokenlist[0].tokenDecimal);
+  const [selectedAsset1TokenUnitName, setSelectedAsset1TokenUnitName] = useState('ALGO');
+  const [selectedAsset1TokenDecimal, setSelectedAsset1TokenDecimal] = useState(6);
 
-  const [selectedAsset2TokenName, setSelectedAsset2TokenName] = useState(tokenlist[1].tokenName);
+  const [selectedAsset2TokenName, setSelectedAsset2TokenName] = useState('USDC');
   const [selectedAsset2TokenNumber, setSelectedAsset2TokenNumber] = useState(tokenlist[1].tokenNumber);
-  const [selectedAsset2TokenUnitName, setSelectedAsset2TokenUnitName] = useState(tokenlist[1].tokenUnitName);
-  const [selectedAsset2TokenDecimal, setSelectedAsset2TokenDecimal] = useState(tokenlist[1].tokenDecimal);
+  const [selectedAsset2TokenUnitName, setSelectedAsset2TokenUnitName] = useState('USDC');
+  const [selectedAsset2TokenDecimal, setSelectedAsset2TokenDecimal] = useState(6);
 
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
@@ -130,12 +106,37 @@ export default function PeraWalletConnection() {
     setOpenAsset2(true);
   };
 
+  const handleClickExchange = () => {
+    asset1HandleClose(
+      selectedAsset2TokenName,
+      selectedAsset2TokenNumber,
+      selectedAsset2TokenUnitName,
+      selectedAsset2TokenDecimal
+    );
+    asset2HandleClose(
+      selectedAsset1TokenName,
+      selectedAsset1TokenNumber,
+      selectedAsset1TokenUnitName,
+      selectedAsset1TokenDecimal
+    );
+  };
+
+  useEffect(() => {
+    handleClickExchange();
+  }, [selectedAsset1TokenDecimal]);
+
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number) => {
     setOpenAsset1(false);
-    setSelectedAsset1TokenName(name);
     setSelectedAsset1TokenNumber(num);
-    setSelectedAsset1TokenUnitName(unit);
-    setSelectedAsset1TokenDecimal(decimal);
+    if (num === 0) {
+      setSelectedAsset1TokenDecimal(6);
+      setSelectedAsset1TokenName('Algorand');
+      setSelectedAsset1TokenUnitName('ALGO');
+    } else {
+      setSelectedAsset1TokenDecimal(decimal);
+      setSelectedAsset1TokenName(name);
+      setSelectedAsset1TokenUnitName(unit);
+    }
     setAssetAmount1('0');
     setAssetAmount2('0');
   };
@@ -145,7 +146,13 @@ export default function PeraWalletConnection() {
     setSelectedAsset2TokenName(name);
     setSelectedAsset2TokenNumber(num);
     setSelectedAsset2TokenUnitName(unit);
-    setSelectedAsset2TokenDecimal(decimal);
+    if (num === 0) {
+      setSelectedAsset2TokenDecimal(6);
+      setSelectedAsset2TokenName('Algorand');
+    } else {
+      setSelectedAsset2TokenDecimal(decimal);
+      setSelectedAsset2TokenName(name);
+    }
     setAssetAmount1('0');
     setAssetAmount2('0');
   };
@@ -164,6 +171,10 @@ export default function PeraWalletConnection() {
 
   const handleAsset2AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount2(event.target.value);
+    console.log(selectedAsset1TokenNumber);
+    console.log(selectedAsset2TokenNumber);
+    console.log(selectedAsset1TokenDecimal);
+    console.log(selectedAsset2TokenDecimal);
     const asset1Amount: bigint = await fixedOutput({
       asset_1: selectedAsset1TokenNumber,
       asset_2: selectedAsset2TokenNumber,
@@ -259,7 +270,7 @@ export default function PeraWalletConnection() {
 
       <Grid container>
         <Grid item xs className={classes.smallIcon}>
-          <IconButton aria-label="swap">
+          <IconButton aria-label="swap" onClick={handleClickExchange}>
             <SwapVertIcon fontSize="medium" />
           </IconButton>
         </Grid>
@@ -366,7 +377,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
   };
 
   const handleAssets = async () => {
-    const newArr = await Promise.all(
+    const newArr: any = await Promise.all(
       tokenlist.map(async (item) => {
         const assetInfo = await getAssetByID(item.tokenNumber);
         return {
@@ -411,7 +422,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                   <Box>
                     <Box display="flex" alignItems="center" gap={1}>
                       <Typography variant="subtitle1" noWrap>
-                        {item.params.name}
+                        {item.tokenNumber === 0 ? 'Algorand' : item.params.name}
                       </Typography>
                       <Tooltip title="Trusted asset by Pera" arrow>
                         <Box
@@ -426,7 +437,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                       </Tooltip>
                     </Box>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      ${item.params['unit-name']}
+                      {item.tokenNumber === 0 ? 'ALGO' : item.params['unit-name']}
                     </Typography>
                   </Box>
                 </Box>
