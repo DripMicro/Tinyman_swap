@@ -110,15 +110,15 @@ export async function fixedInputSwap({
   //   initiatorSigner: signerWithPera(account, perawallet)
   // });
 
-  // const swapExecutionResponse = await Swap.v2.execute({
-  //   network: 'testnet' as SupportedNetwork,
-  //   client: algodClient,
-  //   signedTxns,
-  //   pool,
-  //   txGroup: fixedInputSwapTxns,
-  //   assetIn
-  // });
+  const swapExecutionResponse = await Swap.v2.execute({
+    network: 'mainnet' as SupportedNetwork,
+    client: algodClient,
+    signedTxns,
+    pool,
+    txGroup: fixedInputSwapTxns,
+    assetIn
+  });
 
   console.log('✅ Fixed Input Swap executed successfully!');
-  // console.log({ txnID: swapExecutionResponse.txnID });
+  console.log({ txnID: swapExecutionResponse.txnID });
 }

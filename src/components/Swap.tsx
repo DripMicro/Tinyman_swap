@@ -17,7 +17,6 @@ import { fixedInput } from '../operation/swap/fixedInput';
 import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
 import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAssetByID } from '../utils/accountUtils';
-import { peraWallet } from './Account/perawallet';
 import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
 
@@ -99,8 +98,9 @@ export default function Swap() {
   const [assetAmount2, setAssetAmount2] = useState('');
 
   // const [accountAddress, setAccountAddress] = useState('');
+  const pera = new PeraWalletConnect();
 
-  const [perawallet, setPerawallet] = useState<PeraWalletConnect>();
+  const [perawallet, setPerawallet] = useState<PeraWalletConnect>(pera);
 
   const [accountAddress, setAccountAddress] = useState<string | null>(null);
   //   const [inputValue, setInputValue] = useState('');
@@ -385,7 +385,7 @@ export default function Swap() {
               Swap
             </Button>
           ) : (
-            <Account width="100%" setAccountAddressSwap={setAccountAddress} setPerawallet={setPerawallet} />
+            <Account width="100%" setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
           )}
         </Grid>
       </Grid>
