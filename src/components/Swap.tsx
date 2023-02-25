@@ -4,19 +4,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import { Box, Typography, MenuItem, Tooltip } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
 import useSettings from '../hooks/useSettings';
 import { fixedInput } from '../operation/swap/fixedInput';
+import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
@@ -27,7 +24,7 @@ const tokenlist = [
     tokenNumber: 0,
     tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png',
     tokenUnitName: 'JC',
-    tokenDecimal: 0
+    tokenDecimal: 6
   },
   {
     tokenName: 'USDC',
@@ -42,6 +39,27 @@ const tokenlist = [
     tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
     tokenUnitName: 'Chip',
     tokenDecimal: 1
+  },
+  {
+    tokenName: '',
+    tokenNumber: 793124631,
+    tokenImage: '',
+    tokenUnitName: '',
+    tokenDecimal: 0
+  },
+  {
+    tokenName: '',
+    tokenNumber: 571576867,
+    tokenImage: '',
+    tokenUnitName: '',
+    tokenDecimal: 0
+  },
+  {
+    tokenName: '',
+    tokenNumber: 226701642,
+    tokenImage: '',
+    tokenUnitName: '',
+    tokenDecimal: 0
   }
 ];
 
@@ -118,6 +136,8 @@ export default function PeraWalletConnection() {
     setSelectedAsset1TokenNumber(num);
     setSelectedAsset1TokenUnitName(unit);
     setSelectedAsset1TokenDecimal(decimal);
+    setAssetAmount1('0');
+    setAssetAmount2('0');
   };
 
   const asset2HandleClose = (name: string, num: number, unit: string, decimal: number) => {
@@ -126,19 +146,32 @@ export default function PeraWalletConnection() {
     setSelectedAsset2TokenNumber(num);
     setSelectedAsset2TokenUnitName(unit);
     setSelectedAsset2TokenDecimal(decimal);
+    setAssetAmount1('0');
+    setAssetAmount2('0');
   };
 
   const handleAsset1AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount1(event.target.value);
-    console.log(selectedAsset1TokenNumber);
-    console.log(selectedAsset2TokenNumber);
-    console.log(assetAmount1);
-    console.log(selectedAsset1TokenDecimal);
-    await fixedInput({ asset_1: selectedAsset1TokenNumber, asset_2: selectedAsset2TokenNumber });
+    const asset2Amount: bigint = await fixedInput({
+      asset_1: selectedAsset1TokenNumber,
+      asset_2: selectedAsset2TokenNumber,
+      amount: event.target.value,
+      assetInDecimal: selectedAsset1TokenDecimal,
+      assetOutDecimal: selectedAsset2TokenDecimal
+    });
+    setAssetAmount2((Number(asset2Amount) / 10 ** selectedAsset2TokenDecimal).toString());
   };
 
-  const handleAsset2AmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAsset2AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount2(event.target.value);
+    const asset1Amount: bigint = await fixedOutput({
+      asset_1: selectedAsset1TokenNumber,
+      asset_2: selectedAsset2TokenNumber,
+      amount: event.target.value,
+      assetInDecimal: selectedAsset1TokenDecimal,
+      assetOutDecimal: selectedAsset2TokenDecimal
+    });
+    setAssetAmount1((Number(asset1Amount) / 10 ** selectedAsset1TokenDecimal).toString());
   };
 
   //   const isConnectedToPeraWallet = !!accountAddress;
@@ -287,8 +320,8 @@ export default function PeraWalletConnection() {
             pattern="[0-9]*"
             className={classes.assetInput}
             placeholder="0.00"
-            value={assetAmount1}
-            onChange={handleAsset1AmountChange}
+            value={assetAmount2}
+            onChange={handleAsset2AmountChange}
             style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
           />
         </Grid>
@@ -360,7 +393,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
               key={item['asset-id']}
               sx={{ typography: 'body2', py: 1, px: 2.5 }}
               onClick={() =>
-                handleListItemClick(item.tokenName, item.tokenNumber, item.params['unit-name'], item.params.decimals)
+                handleListItemClick(item.params.name, item.tokenNumber, item.params['unit-name'], item.params.decimals)
               }
             >
               <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
@@ -378,7 +411,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                   <Box>
                     <Box display="flex" alignItems="center" gap={1}>
                       <Typography variant="subtitle1" noWrap>
-                        {item.tokenName}
+                        {item.params.name}
                       </Typography>
                       <Tooltip title="Trusted asset by Pera" arrow>
                         <Box
