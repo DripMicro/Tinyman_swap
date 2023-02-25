@@ -34,7 +34,7 @@ export async function fixedInput({
    * after checking both v1 and v2
    */
 
-  if (asset_1 === 0 || asset_2 === 0) {
+  if (asset_1 === 0) {
     const fixedOutputSwapQuote = Swap.v2.getQuote(
       SwapType.FixedInput,
       pool,
@@ -42,6 +42,16 @@ export async function fixedInput({
       { assetIn: assetInDecimal, assetOut: assetOutDecimal }
     );
     return fixedOutputSwapQuote.assetOutAmount;
+  }
+
+  if (asset_2 === 0) {
+    const fixedOutputSwapQuote = Swap.v2.getQuote(
+      SwapType.FixedOutput,
+      pool,
+      { id: pool.asset1ID, amount: Number(amount) * 10 ** assetOutDecimal },
+      { assetIn: assetInDecimal, assetOut: assetOutDecimal }
+    );
+    return fixedOutputSwapQuote.assetInAmount;
   }
 
   const fixedInputSwapQuote = Swap.v2.getQuote(

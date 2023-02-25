@@ -81,6 +81,7 @@ export default function PeraWalletConnection() {
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
   const [openAsset2, setOpenAsset2] = useState(false);
+  const [isExchange, setIsExchange] = useState(false);
 
   const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState('Algorand');
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
@@ -113,53 +114,64 @@ export default function PeraWalletConnection() {
       selectedAsset2TokenName,
       selectedAsset2TokenNumber,
       selectedAsset2TokenUnitName,
-      selectedAsset2TokenDecimal
+      selectedAsset2TokenDecimal,
+      true
     );
     asset2HandleClose(
       selectedAsset1TokenName,
       selectedAsset1TokenNumber,
       selectedAsset1TokenUnitName,
-      selectedAsset1TokenDecimal
+      selectedAsset1TokenDecimal,
+      true
     );
   };
 
-  useEffect(() => {
-    handleClickExchange();
-  }, [selectedAsset1TokenDecimal]);
+  // useEffect(() => {
+  //   handleClickExchange();
+  // }, [selectedAsset1TokenDecimal]);
 
-  const asset1HandleClose = (name: string, num: number, unit: string, decimal: number) => {
-    setOpenAsset1(false);
-    setSelectedAsset1TokenNumber(num);
-    if (num === 0) {
-      setSelectedAsset1TokenDecimal(6);
-      setSelectedAsset1TokenName('Algorand');
-      setSelectedAsset1TokenUnitName('ALGO');
-    } else {
-      setSelectedAsset1TokenDecimal(decimal);
-      setSelectedAsset1TokenName(name);
-      setSelectedAsset1TokenUnitName(unit);
-    }
-    setAssetAmount1('0');
-    setAssetAmount2('0');
+  const handleClick1Exchange = () => {
+    setIsExchange(!isExchange);
   };
 
-  const asset2HandleClose = (name: string, num: number, unit: string, decimal: number) => {
-    setOpenAsset2(false);
-    setSelectedAsset2TokenName(name);
-    setSelectedAsset2TokenNumber(num);
-    setSelectedAsset2TokenUnitName(unit);
-    if (num === 0) {
-      setSelectedAsset2TokenDecimal(6);
-      setSelectedAsset2TokenName('Algorand');
-    } else {
-      setSelectedAsset2TokenDecimal(decimal);
-      setSelectedAsset2TokenName(name);
+  const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
+    if (num !== selectedAsset2TokenNumber || swap === true) {
+      setOpenAsset1(false);
+      setSelectedAsset1TokenNumber(num);
+      if (num === 0) {
+        setSelectedAsset1TokenDecimal(6);
+        setSelectedAsset1TokenName('Algorand');
+        setSelectedAsset1TokenUnitName('ALGO');
+      } else {
+        setSelectedAsset1TokenDecimal(decimal);
+        setSelectedAsset1TokenName(name);
+        setSelectedAsset1TokenUnitName(unit);
+      }
+      setAssetAmount1('0');
+      setAssetAmount2('0');
     }
-    setAssetAmount1('0');
-    setAssetAmount2('0');
+  };
+
+  const asset2HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
+    if (num !== selectedAsset1TokenNumber || swap === true) {
+      setOpenAsset2(false);
+      setSelectedAsset2TokenName(name);
+      setSelectedAsset2TokenNumber(num);
+      setSelectedAsset2TokenUnitName(unit);
+      if (num === 0) {
+        setSelectedAsset2TokenDecimal(6);
+        setSelectedAsset2TokenName('Algorand');
+      } else {
+        setSelectedAsset2TokenDecimal(decimal);
+        setSelectedAsset2TokenName(name);
+      }
+      setAssetAmount1('0');
+      setAssetAmount2('0');
+    }
   };
 
   const handleAsset1AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(selectedAsset1TokenNumber);
     setAssetAmount1(event.target.value);
     const asset2Amount: bigint = await fixedInput({
       asset_1: selectedAsset1TokenNumber,
@@ -173,10 +185,6 @@ export default function PeraWalletConnection() {
 
   const handleAsset2AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount2(event.target.value);
-    console.log(selectedAsset1TokenNumber);
-    console.log(selectedAsset2TokenNumber);
-    console.log(selectedAsset1TokenDecimal);
-    console.log(selectedAsset2TokenDecimal);
     const asset1Amount: bigint = await fixedOutput({
       asset_1: selectedAsset1TokenNumber,
       asset_2: selectedAsset2TokenNumber,
@@ -379,7 +387,7 @@ export interface SelectTokenDialogProps {
   selectedAssetTokenNumber: number;
   selectedAssetTokenUnitName: string;
   selectedAssetTokenDecimal: number;
-  onClose: (name: string, num: number, unit: string, decimal: number) => void;
+  onClose: (name: string, num: number, unit: string, decimal: number, swap: boolean) => void;
 }
 
 function SelectTokenDialog(props: SelectTokenDialogProps) {
@@ -395,11 +403,17 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
   const [balanceList, setBalanceList] = useState<Array<{ params: any; tokenName: string; tokenNumber: number }>>([]);
 
   const handleClose = () => {
-    onClose(selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenUnitName, selectedAssetTokenDecimal);
+    onClose(
+      selectedAssetTokenName,
+      selectedAssetTokenNumber,
+      selectedAssetTokenUnitName,
+      selectedAssetTokenDecimal,
+      false
+    );
   };
 
   const handleListItemClick = (name: string, num: number, unit: string, decimal: number) => {
-    onClose(name, num, unit, decimal);
+    onClose(name, num, unit, decimal, false);
   };
 
   const handleAssets = async () => {
