@@ -131,7 +131,7 @@ export default function PeraWalletConnection() {
       })
     );
     setBalanceList(newArr);
-    console.log(newArr);
+    console.log(balanceList);
   };
 
   useEffect(() => {
@@ -327,7 +327,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
               <ListItemText primary={email.tokenName} />
             </ListItem>
           ))} */}
-          {/* {balanceList.map((item) => (
+          {/* {balanceList.map((item:any) => (
             <MenuItem key={item['asset-id']} sx={{ typography: 'body2', py: 1, px: 2.5 }}>
               <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
                 <Box display="flex" alignItems="center">
