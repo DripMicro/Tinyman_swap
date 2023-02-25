@@ -1,28 +1,38 @@
 import { poolUtils, SupportedNetwork, Swap, SwapType } from '@tinymanorg/tinyman-js-sdk';
 import { Account } from 'algosdk';
 
+import { PeraWalletConnect } from '@perawallet/connect';
 import { algodClient } from '../../util/client';
-import signerWithSecretKey from '../../util/initiatorSigner';
+// import signerWithPera from '../../util/initiatorSigner';
+// import signerWithPera from '../../util/perawalletInitiatorSigner';
 
 /**
  * Executes a swap with a fixed input amount
  * (Input amount is entered by the user, output amount is to be calculated by the SDK)
  */
 export async function fixedInputSwap({
-  account,
   asset_1,
-  asset_2
+  asset_2,
+  amount,
+  assetInDecimal,
+  assetOutDecimal,
+  account,
+  perawallet
 }: {
-  account: Account;
-  asset_1: { id: string; unit_name: string };
-  asset_2: { id: string; unit_name: string };
+  asset_1: number;
+  asset_2: number;
+  amount: string;
+  assetInDecimal: number;
+  assetOutDecimal: number;
+  account: string;
+  perawallet: PeraWalletConnect;
 }) {
-  const initiatorAddr = account.addr;
+  const initiatorAddr = account;
   const pool = await poolUtils.v2.getPoolInfo({
-    network: 'testnet' as SupportedNetwork,
+    network: 'mainnet' as SupportedNetwork,
     client: algodClient,
-    asset1ID: Number(asset_1.id),
-    asset2ID: Number(asset_2.id)
+    asset1ID: Number(asset_1),
+    asset2ID: Number(asset_2)
   });
 
   /**
@@ -33,17 +43,52 @@ export async function fixedInputSwap({
   const fixedInputSwapQuote = Swap.v2.getQuote(
     SwapType.FixedInput,
     pool,
-    { id: pool.asset1ID, amount: 1_000_000 },
-    { assetIn: 6, assetOut: 6 }
+    { id: pool.asset1ID, amount: Number(amount) * 10 ** assetInDecimal },
+    { assetIn: assetInDecimal, assetOut: assetOutDecimal }
   );
-  const assetIn = {
+
+  let assetIn = {
     id: fixedInputSwapQuote.assetInID,
     amount: fixedInputSwapQuote.assetInAmount
   };
-  const assetOut = {
+  let assetOut = {
     id: fixedInputSwapQuote.assetOutID,
     amount: fixedInputSwapQuote.assetOutAmount
   };
+
+  if (asset_1 === 0) {
+    const fixedInputSwapQuote = Swap.v2.getQuote(
+      SwapType.FixedInput,
+      pool,
+      { id: pool.asset2ID, amount: Number(amount) * 10 ** assetInDecimal },
+      { assetIn: assetInDecimal, assetOut: assetOutDecimal }
+    );
+    assetIn = {
+      id: fixedInputSwapQuote.assetInID,
+      amount: fixedInputSwapQuote.assetInAmount
+    };
+    assetOut = {
+      id: fixedInputSwapQuote.assetOutID,
+      amount: fixedInputSwapQuote.assetOutAmount
+    };
+  }
+
+  if (asset_2 === 0) {
+    const fixedInputSwapQuote = Swap.v2.getQuote(
+      SwapType.FixedOutput,
+      pool,
+      { id: pool.asset1ID, amount: Number(amount) * 10 ** assetOutDecimal },
+      { assetIn: assetInDecimal, assetOut: assetOutDecimal }
+    );
+    assetIn = {
+      id: fixedInputSwapQuote.assetInID,
+      amount: fixedInputSwapQuote.assetInAmount
+    };
+    assetOut = {
+      id: fixedInputSwapQuote.assetOutID,
+      amount: fixedInputSwapQuote.assetOutAmount
+    };
+  }
 
   const fixedInputSwapTxns = await Swap.v2.generateTxns({
     client: algodClient,
@@ -55,13 +100,18 @@ export async function fixedInputSwap({
     slippage: 0.05
   });
 
-  const signedTxns = await Swap.v2.signTxns({
-    txGroup: fixedInputSwapTxns,
-    initiatorSigner: signerWithSecretKey(account)
-  });
+  console.log(fixedInputSwapTxns);
+
+  const signedTxns = await perawallet.signTransaction([fixedInputSwapTxns]);
+
+  console.log(signedTxns);
+  // const signedTxns = await Swap.v2.signTxns({
+  //   txGroup: fixedInputSwapTxns,
+  //   initiatorSigner: signerWithPera(account, perawallet)
+  // });
 
   const swapExecutionResponse = await Swap.v2.execute({
-    network: 'testnet' as SupportedNetwork,
+    network: 'mainnet' as SupportedNetwork,
     client: algodClient,
     signedTxns,
     pool,
