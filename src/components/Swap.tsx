@@ -24,7 +24,7 @@ const tokenlist = [
     tokenNumber: 0,
     tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png',
     tokenUnitName: 'JC',
-    tokenDecimal: 0
+    tokenDecimal: 6
   },
   {
     tokenName: 'USDC',
@@ -39,6 +39,27 @@ const tokenlist = [
     tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
     tokenUnitName: 'Chip',
     tokenDecimal: 1
+  },
+  {
+    tokenName: '',
+    tokenNumber: 793124631,
+    tokenImage: '',
+    tokenUnitName: '',
+    tokenDecimal: 0
+  },
+  {
+    tokenName: '',
+    tokenNumber: 571576867,
+    tokenImage: '',
+    tokenUnitName: '',
+    tokenDecimal: 0
+  },
+  {
+    tokenName: '',
+    tokenNumber: 226701642,
+    tokenImage: '',
+    tokenUnitName: '',
+    tokenDecimal: 0
   }
 ];
 
@@ -115,6 +136,8 @@ export default function PeraWalletConnection() {
     setSelectedAsset1TokenNumber(num);
     setSelectedAsset1TokenUnitName(unit);
     setSelectedAsset1TokenDecimal(decimal);
+    setAssetAmount1('0');
+    setAssetAmount2('0');
   };
 
   const asset2HandleClose = (name: string, num: number, unit: string, decimal: number) => {
@@ -123,6 +146,8 @@ export default function PeraWalletConnection() {
     setSelectedAsset2TokenNumber(num);
     setSelectedAsset2TokenUnitName(unit);
     setSelectedAsset2TokenDecimal(decimal);
+    setAssetAmount1('0');
+    setAssetAmount2('0');
   };
 
   const handleAsset1AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -368,7 +393,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
               key={item['asset-id']}
               sx={{ typography: 'body2', py: 1, px: 2.5 }}
               onClick={() =>
-                handleListItemClick(item.tokenName, item.tokenNumber, item.params['unit-name'], item.params.decimals)
+                handleListItemClick(item.params.name, item.tokenNumber, item.params['unit-name'], item.params.decimals)
               }
             >
               <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
@@ -386,7 +411,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                   <Box>
                     <Box display="flex" alignItems="center" gap={1}>
                       <Typography variant="subtitle1" noWrap>
-                        {item.tokenName}
+                        {item.params.name}
                       </Typography>
                       <Tooltip title="Trusted asset by Pera" arrow>
                         <Box
