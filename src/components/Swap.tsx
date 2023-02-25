@@ -69,10 +69,6 @@ export default function PeraWalletConnection() {
   const [openAsset1, setOpenAsset1] = useState(false);
   const [openAsset2, setOpenAsset2] = useState(false);
 
-  const [balanceList, setBalanceList] = useState<
-    Array<{ params: any; tokenName: string; tokenNumber: number; tokenImage: string }>
-  >([]);
-
   const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState(tokenlist[0].tokenName);
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
   const [selectedAsset1TokenImage, setSelectedAsset1TokenImage] = useState(tokenlist[0].tokenImage);
@@ -117,27 +113,8 @@ export default function PeraWalletConnection() {
 
   const handleAsset2AmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount2(event.target.value);
-    handleAssets();
   };
 
-  const handleAssets = async () => {
-    const newArr = await Promise.all(
-      tokenlist.map(async (item) => {
-        const assetInfo = await getAssetByID(item.tokenNumber);
-        return {
-          ...item,
-          params: assetInfo.asset.params
-        };
-      })
-    );
-    setBalanceList(newArr);
-    console.log(newArr);
-  };
-
-  useEffect(() => {
-    handleAssets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   //   const isConnectedToPeraWallet = !!accountAddress;
   //   const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
   //     setInputValue(event.target.value);
@@ -299,6 +276,9 @@ export interface SelectTokenDialogProps {
 function SelectTokenDialog(props: SelectTokenDialogProps) {
   const classes = useStyles();
   const { onClose, selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenImage, open } = props;
+  const [balanceList, setBalanceList] = useState<
+    Array<{ params: any; tokenName: string; tokenNumber: number; tokenImage: string }>
+  >([]);
 
   const handleClose = () => {
     onClose(selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenImage);
@@ -308,32 +288,36 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
     onClose(name, num, image);
   };
 
+  const handleAssets = async () => {
+    const newArr = await Promise.all(
+      tokenlist.map(async (item) => {
+        const assetInfo = await getAssetByID(item.tokenNumber);
+        return {
+          ...item,
+          params: assetInfo.asset.params
+        };
+      })
+    );
+    setBalanceList(newArr);
+    console.log(newArr);
+  };
+
+  useEffect(() => {
+    handleAssets();
+  }, []);
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="form-dialog-title" open={open}>
       <DialogTitle id="form-dialog-title">Select an asset</DialogTitle>
       <DialogContent>
         <List>
-          {/* {tokenlist.map((email) => (
-            <ListItem
-              button
-              onClick={() => handleListItemClick(email.tokenName, email.tokenNumber, email.tokenImage)}
-              key={email.tokenName}
-            >
-              <ListItemAvatar>
-                <Avatar className={classes.avatar}>
-                  <img src={email.tokenImage} alt={email.tokenName} />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={email.tokenName} />
-            </ListItem>
-          ))} */}
-          {/* {balanceList.map((item) => (
+          {balanceList.map((item: any) => (
             <MenuItem key={item['asset-id']} sx={{ typography: 'body2', py: 1, px: 2.5 }}>
               <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
                 <Box display="flex" alignItems="center">
                   <Box
                     component="img"
-                    src={`/static/token/${item['asset-id']}.png`}
+                    src={item.tokenImage}
                     alt="Asset logo"
                     sx={{
                       mr: 2,
@@ -344,7 +328,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                   <Box>
                     <Box display="flex" alignItems="center" gap={1}>
                       <Typography variant="subtitle1" noWrap>
-                        {item.params.name}
+                        {item.tokenName}
                       </Typography>
                       <Tooltip title="Trusted asset by Pera" arrow>
                         <Box
@@ -364,16 +348,13 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
                   </Box>
                 </Box>
                 <Box display="flex" alignItems="flex-end" justifyContent="center" flexDirection="column">
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                    0
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                    ≈ $0
+                  <Typography variant="body2" sx={{ color: 'text.secondary', ml: 10 }} noWrap>
+                    {item.tokenNumber}
                   </Typography>
                 </Box>
               </Box>
             </MenuItem>
-          ))} */}
+          ))}
         </List>
       </DialogContent>
     </Dialog>
