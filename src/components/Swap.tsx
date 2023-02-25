@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import { PeraWalletConnect } from '@perawallet/connect';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -13,6 +14,7 @@ import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
 import useSettings from '../hooks/useSettings';
 import { fixedInput } from '../operation/swap/fixedInput';
+import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
 import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
@@ -76,12 +78,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function PeraWalletConnection() {
+export default function Swap() {
   const classes = useStyles();
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
   const [openAsset2, setOpenAsset2] = useState(false);
-  const [isExchange, setIsExchange] = useState(false);
 
   const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState('Algorand');
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
@@ -97,6 +98,8 @@ export default function PeraWalletConnection() {
   const [assetAmount2, setAssetAmount2] = useState('');
 
   const [accountAddress, setAccountAddress] = useState('');
+
+  const [perawallet, setPerawallet] = useState<PeraWalletConnect>();
 
   //   const [accountAddress, setAccountAddress] = useState<string | null>(null);
   //   const [inputValue, setInputValue] = useState('');
@@ -126,12 +129,18 @@ export default function PeraWalletConnection() {
     );
   };
 
-  // useEffect(() => {
-  //   handleClickExchange();
-  // }, [selectedAsset1TokenDecimal]);
-
-  const handleClick1Exchange = () => {
-    setIsExchange(!isExchange);
+  const handleSwap = () => {
+    if (accountAddress.length > 0) {
+      console.log(accountAddress);
+      fixedInputSwap({
+        asset_1: selectedAsset1TokenNumber,
+        asset_2: selectedAsset2TokenNumber,
+        amount: assetAmount1,
+        assetInDecimal: selectedAsset1TokenDecimal,
+        assetOutDecimal: selectedAsset2TokenDecimal,
+        account: accountAddress
+      });
+    }
   };
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
@@ -352,6 +361,7 @@ export default function PeraWalletConnection() {
         <Grid item xs className={classes.connectButton}>
           {accountAddress.length > 0 ? (
             <Button
+              onClick={handleSwap}
               variant="contained"
               className="bto"
               sx={{
@@ -373,7 +383,7 @@ export default function PeraWalletConnection() {
               Swap
             </Button>
           ) : (
-            <Account width="100%" setAccountAddress={setAccountAddress} />
+            <Account width="100%" setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
           )}
         </Grid>
       </Grid>
