@@ -8,11 +8,11 @@ import useSettings from '../../hooks/useSettings';
 
 // ----------------------------------------------------------------------
 
-export default function MainLayout() {
+export default function MainLayout(props) {
   const { themeMode } = useSettings();
   return (
     <div id={themeMode} style={{ paddingBottom: '70px'}}>
-      <MainNavbar />
+      <MainNavbar peraWallet={props.peraWallet} />
       <div>
         <Outlet />
       </div>

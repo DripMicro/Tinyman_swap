@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { useState } from 'react';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { Box, AppBar, Toolbar, Container } from '@material-ui/core';
@@ -46,9 +47,11 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function MainNavbar() {
+export default function MainNavbar(props) {
   const { onChangeMode, themeMode } = useSettings();
   // const isOffset = useOffSetTop(100);
+  const [accountAddress, setAccountAddress] = useState('');
+  const [perawallet, setPerawallet] = useState();
   const isOffset = false;
   const { pathname } = useLocation();
   const isHome = pathname === '/';
@@ -97,9 +100,7 @@ export default function MainNavbar() {
             />
           </MHidden>
           <Box sx={{ flexGrow: 1 }} />
-          <Account />
-          
-
+          <Account setAccountAddressSwap={setAccountAddress} setPerawallet={setPerawallet} />
           <Box
             component="img"
             sx={{ width: '32px', cursor: 'pointer', marginLeft: '12px', '&:hover': { opacity: '80%' } }}

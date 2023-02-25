@@ -17,6 +17,7 @@ import { fixedInput } from '../operation/swap/fixedInput';
 import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
 import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAssetByID } from '../utils/accountUtils';
+import { peraWallet } from './Account/perawallet';
 import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
 
@@ -97,11 +98,11 @@ export default function Swap() {
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
 
-  const [accountAddress, setAccountAddress] = useState('');
+  // const [accountAddress, setAccountAddress] = useState('');
 
   const [perawallet, setPerawallet] = useState<PeraWalletConnect>();
 
-  //   const [accountAddress, setAccountAddress] = useState<string | null>(null);
+  const [accountAddress, setAccountAddress] = useState<string | null>(null);
   //   const [inputValue, setInputValue] = useState('');
 
   const handleClickOpenAsset1 = () => {
@@ -130,7 +131,7 @@ export default function Swap() {
   };
 
   const handleSwap = () => {
-    if (accountAddress.length > 0) {
+    if (accountAddress && accountAddress.length > 0 && perawallet !== undefined) {
       console.log(accountAddress);
       fixedInputSwap({
         asset_1: selectedAsset1TokenNumber,
@@ -138,7 +139,8 @@ export default function Swap() {
         amount: assetAmount1,
         assetInDecimal: selectedAsset1TokenDecimal,
         assetOutDecimal: selectedAsset2TokenDecimal,
-        account: accountAddress
+        account: accountAddress,
+        perawallet
       });
     }
   };
@@ -359,7 +361,7 @@ export default function Swap() {
 
       <Grid container spacing={3}>
         <Grid item xs className={classes.connectButton}>
-          {accountAddress.length > 0 ? (
+          {accountAddress && accountAddress.length > 0 ? (
             <Button
               onClick={handleSwap}
               variant="contained"
@@ -383,7 +385,7 @@ export default function Swap() {
               Swap
             </Button>
           ) : (
-            <Account width="100%" setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
+            <Account width="100%" setAccountAddressSwap={setAccountAddress} setPerawallet={setPerawallet} />
           )}
         </Grid>
       </Grid>

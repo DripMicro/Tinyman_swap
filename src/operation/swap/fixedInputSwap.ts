@@ -3,7 +3,8 @@ import { Account } from 'algosdk';
 
 import { PeraWalletConnect } from '@perawallet/connect';
 import { algodClient } from '../../util/client';
-import signerWithPera from '../../util/initiatorSigner';
+// import signerWithPera from '../../util/initiatorSigner';
+// import signerWithPera from '../../util/perawalletInitiatorSigner';
 
 /**
  * Executes a swap with a fixed input amount
@@ -15,7 +16,8 @@ export async function fixedInputSwap({
   amount,
   assetInDecimal,
   assetOutDecimal,
-  account
+  account,
+  perawallet
 }: {
   asset_1: number;
   asset_2: number;
@@ -23,6 +25,7 @@ export async function fixedInputSwap({
   assetInDecimal: number;
   assetOutDecimal: number;
   account: string;
+  perawallet: PeraWalletConnect;
 }) {
   const initiatorAddr = account;
   const pool = await poolUtils.v2.getPoolInfo({
@@ -99,6 +102,9 @@ export async function fixedInputSwap({
 
   console.log(fixedInputSwapTxns);
 
+  const signedTxns = await perawallet.signTransaction([fixedInputSwapTxns]);
+
+  console.log(signedTxns);
   // const signedTxns = await Swap.v2.signTxns({
   //   txGroup: fixedInputSwapTxns,
   //   initiatorSigner: signerWithPera(account, perawallet)

@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function CardSwap() {
+export default function CardSwap(props) {
   const { themeMode } = useSettings();
   const classes = useStyles();
   return (
     <Card className={classes.root} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
       <div className="widget_parent">
-        <Swap />
+        <Swap/>
       </div>
     </Card>
   );
