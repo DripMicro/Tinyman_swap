@@ -38,7 +38,7 @@ export default function CardSwap(props) {
   return (
     <Card className={classes.root} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
       <div className="widget_parent">
-        <Swap/>
+        <Swap isConnectedToPeraWallet = {props.isConnectedToPeraWallet} setIsConnectedToPeraWallet = {props.setIsConnectedToPeraWallet}/>
       </div>
     </Card>
   );

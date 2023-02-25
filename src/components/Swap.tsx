@@ -78,7 +78,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Swap() {
+export interface SwapProps {
+  isConnectedToPeraWallet: boolean;
+  setIsConnectedToPeraWallet: () => void;
+}
+
+export default function Swap(props: SwapProps) {
+  const { isConnectedToPeraWallet, setIsConnectedToPeraWallet } = props;
   const classes = useStyles();
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
@@ -385,7 +391,13 @@ export default function Swap() {
               Swap
             </Button>
           ) : (
-            <Account width="100%" setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
+            <Account
+              width="100%"
+              setAccountAddress={setAccountAddress}
+              setPerawallet={setPerawallet}
+              isConnectedToPeraWallet={isConnectedToPeraWallet}
+              setIsConnectedToPeraWallet={setIsConnectedToPeraWallet}
+            />
           )}
         </Grid>
       </Grid>

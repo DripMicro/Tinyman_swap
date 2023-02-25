@@ -12,7 +12,7 @@ export default function MainLayout(props) {
   const { themeMode } = useSettings();
   return (
     <div id={themeMode} style={{ paddingBottom: '70px'}}>
-      <MainNavbar peraWallet={props.peraWallet} />
+      <MainNavbar isConnectedToPeraWallet = {props.isConnectedToPeraWallet} setIsConnectedToPeraWallet = {props.setIsConnectedToPeraWallet}/>
       <div>
         <Outlet />
       </div>

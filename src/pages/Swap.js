@@ -25,7 +25,7 @@ export default function SwapPage(props) {
   return (
     <RootStyle title="App | Backed Capital" id="move_top">
       <ContentStyle>
-          <Swap peraWallet={props.peraWallet}/>
+          <Swap isConnectedToPeraWallet = {props.isConnectedToPeraWallet} setIsConnectedToPeraWallet = {props.setIsConnectedToPeraWallet}/>
       </ContentStyle>
     </RootStyle>
   );
