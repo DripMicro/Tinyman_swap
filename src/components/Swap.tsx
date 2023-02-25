@@ -26,19 +26,22 @@ const tokenlist = [
     tokenName: 'Algorand',
     tokenNumber: 0,
     tokenImage: 'https://asa-list.tinyman.org/assets/0/icon.png',
-    tokenUnitName: 'JC'
+    tokenUnitName: 'JC',
+    tokenDecimal: 0
   },
   {
     tokenName: 'USDC',
     tokenNumber: 31566704,
     tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
-    tokenUnitName: 'USDC'
+    tokenUnitName: 'USDC',
+    tokenDecimal: 6
   },
   {
     tokenName: 'Chips',
     tokenNumber: 388592191,
     tokenImage: 'https://asa-list.tinyman.org/assets/31566704/icon.png',
-    tokenUnitName: 'Chip'
+    tokenUnitName: 'Chip',
+    tokenDecimal: 1
   }
 ];
 
@@ -88,10 +91,12 @@ export default function PeraWalletConnection() {
   const [selectedAsset1TokenName, setSelectedAsset1TokenName] = useState(tokenlist[0].tokenName);
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
   const [selectedAsset1TokenUnitName, setSelectedAsset1TokenUnitName] = useState(tokenlist[0].tokenUnitName);
+  const [selectedAsset1TokenDecimal, setSelectedAsset1TokenDecimal] = useState(tokenlist[0].tokenDecimal);
 
   const [selectedAsset2TokenName, setSelectedAsset2TokenName] = useState(tokenlist[1].tokenName);
   const [selectedAsset2TokenNumber, setSelectedAsset2TokenNumber] = useState(tokenlist[1].tokenNumber);
   const [selectedAsset2TokenUnitName, setSelectedAsset2TokenUnitName] = useState(tokenlist[1].tokenUnitName);
+  const [selectedAsset2TokenDecimal, setSelectedAsset2TokenDecimal] = useState(tokenlist[1].tokenDecimal);
 
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
@@ -107,24 +112,28 @@ export default function PeraWalletConnection() {
     setOpenAsset2(true);
   };
 
-  const asset1HandleClose = (name: string, num: number, unit: string) => {
+  const asset1HandleClose = (name: string, num: number, unit: string, decimal: number) => {
     setOpenAsset1(false);
     setSelectedAsset1TokenName(name);
     setSelectedAsset1TokenNumber(num);
     setSelectedAsset1TokenUnitName(unit);
+    setSelectedAsset1TokenDecimal(decimal);
   };
 
-  const asset2HandleClose = (name: string, num: number, unit: string) => {
+  const asset2HandleClose = (name: string, num: number, unit: string, decimal: number) => {
     setOpenAsset2(false);
     setSelectedAsset2TokenName(name);
     setSelectedAsset2TokenNumber(num);
     setSelectedAsset2TokenUnitName(unit);
+    setSelectedAsset2TokenDecimal(decimal);
   };
 
   const handleAsset1AmountChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setAssetAmount1(event.target.value);
     console.log(selectedAsset1TokenNumber);
     console.log(selectedAsset2TokenNumber);
+    console.log(assetAmount1);
+    console.log(selectedAsset1TokenDecimal);
     await fixedInput({ asset_1: selectedAsset1TokenNumber, asset_2: selectedAsset2TokenNumber });
   };
 
@@ -197,6 +206,7 @@ export default function PeraWalletConnection() {
             selectedAssetTokenName={selectedAsset1TokenName}
             selectedAssetTokenNumber={selectedAsset1TokenNumber}
             selectedAssetTokenUnitName={selectedAsset1TokenUnitName}
+            selectedAssetTokenDecimal={selectedAsset1TokenDecimal}
             open={openAsset1}
             onClose={asset1HandleClose}
           />
@@ -266,6 +276,7 @@ export default function PeraWalletConnection() {
             selectedAssetTokenName={selectedAsset2TokenName}
             selectedAssetTokenNumber={selectedAsset2TokenNumber}
             selectedAssetTokenUnitName={selectedAsset2TokenUnitName}
+            selectedAssetTokenDecimal={selectedAsset2TokenDecimal}
             open={openAsset2}
             onClose={asset2HandleClose}
           />
@@ -297,20 +308,28 @@ export interface SelectTokenDialogProps {
   selectedAssetTokenName: string;
   selectedAssetTokenNumber: number;
   selectedAssetTokenUnitName: string;
-  onClose: (name: string, num: number, unit: string) => void;
+  selectedAssetTokenDecimal: number;
+  onClose: (name: string, num: number, unit: string, decimal: number) => void;
 }
 
 function SelectTokenDialog(props: SelectTokenDialogProps) {
   const classes = useStyles();
-  const { onClose, selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenUnitName, open } = props;
+  const {
+    onClose,
+    selectedAssetTokenName,
+    selectedAssetTokenNumber,
+    selectedAssetTokenUnitName,
+    selectedAssetTokenDecimal,
+    open
+  } = props;
   const [balanceList, setBalanceList] = useState<Array<{ params: any; tokenName: string; tokenNumber: number }>>([]);
 
   const handleClose = () => {
-    onClose(selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenUnitName);
+    onClose(selectedAssetTokenName, selectedAssetTokenNumber, selectedAssetTokenUnitName, selectedAssetTokenDecimal);
   };
 
-  const handleListItemClick = (name: string, num: number, unit: string) => {
-    onClose(name, num, unit);
+  const handleListItemClick = (name: string, num: number, unit: string, decimal: number) => {
+    onClose(name, num, unit, decimal);
   };
 
   const handleAssets = async () => {
@@ -340,7 +359,9 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
             <MenuItem
               key={item['asset-id']}
               sx={{ typography: 'body2', py: 1, px: 2.5 }}
-              onClick={() => handleListItemClick(item.tokenName, item.tokenNumber, item.params['unit-name'])}
+              onClick={() =>
+                handleListItemClick(item.tokenName, item.tokenNumber, item.params['unit-name'], item.params.decimals)
+              }
             >
               <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
                 <Box display="flex" alignItems="center">
