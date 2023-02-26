@@ -21,11 +21,11 @@ const ContentStyle = styled('div')(() => ({
 
 // ----------------------------------------------------------------------
 
-export default function SwapPage(props) {
+export default function SwapPage() {
   return (
     <RootStyle title="App | Backed Capital" id="move_top">
       <ContentStyle>
-          <Swap isConnectedToPeraWallet = {props.isConnectedToPeraWallet} setIsConnectedToPeraWallet = {props.setIsConnectedToPeraWallet}/>
+          <Swap />
       </ContentStyle>
     </RootStyle>
   );

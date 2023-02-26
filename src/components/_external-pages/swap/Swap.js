@@ -12,7 +12,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Swap(props) {
+export default function Swap() {
   return (
     <RootStyle>
         <Container className='widget-heading' maxWidth="lg" sx={{ position: 'relative', paddingTop: { xs: '130px', md: 15 } }}>
@@ -23,7 +23,7 @@ export default function Swap(props) {
             Swap your stablecoins from one network to another. You can use them later to tokenize assets.
             </Typography>
             <Grid spacing={10} justifyContent="center" display='flex' alignItems="center" alignContent='center'>
-                <CardSwap isConnectedToPeraWallet = {props.isConnectedToPeraWallet} setIsConnectedToPeraWallet = {props.setIsConnectedToPeraWallet}/>
+                <CardSwap />
             </Grid>
         </Container>
     </RootStyle>

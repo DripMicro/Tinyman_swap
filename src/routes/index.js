@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Suspense, lazy, useState } from 'react';
+import { Suspense, lazy } from 'react';
 import { useRoutes, useLocation, Navigate } from 'react-router-dom';
-import { PeraWalletConnect } from '@perawallet/connect';
 // layouts
 import MainLayout from '../layouts/main';
 import AuthLayout from '../layouts/auth';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+
 
 // ----------------------------------------------------------------------
 
@@ -36,20 +36,20 @@ const Loadable = (Component) => (props) => {
   );
 };
 
-export default function Router() {
-  const [isConnectedToPeraWallet, setIsConnectedToPeraWallet] = useState(false);
 
+
+export default function Router() {
   return useRoutes([
     // Main Routes
     {
       path: '/',
-      element: <MainLayout isConnectedToPeraWallet = {isConnectedToPeraWallet} setIsConnectedToPeraWallet = {setIsConnectedToPeraWallet} />,
+      element: <MainLayout />,
       children: [
         { path: '/', element: <FiatPage /> },
         { path: '/fiat', element: <FiatPage /> },
         { path: '/invest', element: <PrivacyPage /> },
         { path: '/stake', element: <TermsPage /> },
-        { path: '/swap', element: <SwapPage isConnectedToPeraWallet = {isConnectedToPeraWallet} setIsConnectedToPeraWallet = {setIsConnectedToPeraWallet} /> },
+        { path: '/swap', element: <SwapPage /> },
         { path: '/invest_detail', element: <InvestEquity /> },
         { path: '/team', element: <TeamPage /> },
         { path: '/ecosystem', element: <Ecosystem /> },

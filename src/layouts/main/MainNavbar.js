@@ -100,7 +100,7 @@ export default function MainNavbar(props) {
             />
           </MHidden>
           <Box sx={{ flexGrow: 1 }} />
-          <Account setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} isConnectedToPeraWallet = {props.isConnectedToPeraWallet} setIsConnectedToPeraWallet = {props.setIsConnectedToPeraWallet} />
+          <Account setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
           <Box
             component="img"
             sx={{ width: '32px', cursor: 'pointer', marginLeft: '12px', '&:hover': { opacity: '80%' } }}

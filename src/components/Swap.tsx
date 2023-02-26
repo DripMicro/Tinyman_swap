@@ -78,13 +78,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export interface SwapProps {
-  isConnectedToPeraWallet: boolean;
-  setIsConnectedToPeraWallet: () => void;
-}
-
-export default function Swap(props: SwapProps) {
-  const { isConnectedToPeraWallet, setIsConnectedToPeraWallet } = props;
+export default function Swap() {
   const classes = useStyles();
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
@@ -134,6 +128,10 @@ export default function Swap(props: SwapProps) {
       selectedAsset1TokenDecimal,
       true
     );
+    console.log(selectedAsset1TokenDecimal);
+    console.log(selectedAsset2TokenDecimal);
+    console.log(selectedAsset1TokenNumber);
+    console.log(selectedAsset2TokenNumber);
   };
 
   const handleSwap = () => {
@@ -391,13 +389,7 @@ export default function Swap(props: SwapProps) {
               Swap
             </Button>
           ) : (
-            <Account
-              width="100%"
-              setAccountAddress={setAccountAddress}
-              setPerawallet={setPerawallet}
-              isConnectedToPeraWallet={isConnectedToPeraWallet}
-              setIsConnectedToPeraWallet={setIsConnectedToPeraWallet}
-            />
+            <Account width="100%" setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
           )}
         </Grid>
       </Grid>
@@ -451,7 +443,6 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
       })
     );
     setBalanceList(newArr);
-    console.log(newArr);
   };
 
   useEffect(() => {

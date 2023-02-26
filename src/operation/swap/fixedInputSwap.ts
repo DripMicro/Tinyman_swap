@@ -73,11 +73,21 @@ export async function fixedInputSwap({
     };
   }
 
+  let fixedInputSwapTxns = await Swap.v2.generateTxns({
+    client: algodClient,
+    swapType: SwapType.FixedInput,
+    pool,
+    initiatorAddr,
+    assetIn,
+    assetOut,
+    slippage: 0.05
+  });
+
   if (asset_2 === 0) {
     const fixedInputSwapQuote = Swap.v2.getQuote(
       SwapType.FixedOutput,
       pool,
-      { id: pool.asset1ID, amount: Number(amount) * 10 ** assetOutDecimal },
+      { id: pool.asset1ID, amount: Number(amount) * 10 ** assetInDecimal },
       { assetIn: assetInDecimal, assetOut: assetOutDecimal }
     );
     assetIn = {
@@ -88,17 +98,48 @@ export async function fixedInputSwap({
       id: fixedInputSwapQuote.assetOutID,
       amount: fixedInputSwapQuote.assetOutAmount
     };
+
+    fixedInputSwapTxns = await Swap.v2.generateTxns({
+      client: algodClient,
+      swapType: SwapType.FixedOutput,
+      pool,
+      initiatorAddr,
+      assetIn,
+      assetOut,
+      slippage: 0.05
+    });
   }
 
-  const fixedInputSwapTxns = await Swap.v2.generateTxns({
-    client: algodClient,
-    swapType: SwapType.FixedInput,
-    pool,
-    initiatorAddr,
-    assetIn,
-    assetOut,
-    slippage: 0.05
-  });
+  if (asset_1 !== pool.asset1ID && asset_1 !== 0 && asset_2 !== 0) {
+    const fixedOutputSwapQuote = Swap.v2.getQuote(
+      SwapType.FixedOutput,
+      pool,
+      { id: pool.asset2ID, amount: Number(amount) * 10 ** assetInDecimal },
+      { assetIn: assetOutDecimal, assetOut: assetInDecimal }
+    );
+
+    assetIn = {
+      id: fixedOutputSwapQuote.assetInID,
+      amount: fixedOutputSwapQuote.assetInAmount
+    };
+    assetOut = {
+      id: fixedOutputSwapQuote.assetOutID,
+      amount: fixedOutputSwapQuote.assetOutAmount
+    };
+
+    fixedInputSwapTxns = await Swap.v2.generateTxns({
+      client: algodClient,
+      swapType: SwapType.FixedOutput,
+      pool,
+      initiatorAddr,
+      assetIn,
+      assetOut,
+      slippage: 0.05
+    });
+  }
+
+  console.log(`assetIn.amount: ${assetIn.amount}`);
+  console.log(`assetOut.amount: ${assetOut.amount}`);
 
   console.log(fixedInputSwapTxns);
 

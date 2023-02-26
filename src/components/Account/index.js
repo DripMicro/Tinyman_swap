@@ -93,8 +93,6 @@ export default function Account(props) {
   const setAccountAddressSwap = props.setAccountAddress;
   const {setPerawallet} = props.setPerawallet;
   console.log(props);
-  const isConnectedToWallet = props.isConnectedToPeraWallet;
-  const setIsConnectedToWallet = props.setIsConnectedToPeraWallet;
   const { themeMode } = useSettings();
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -132,8 +130,7 @@ export default function Account(props) {
   ];
 
   const [accountAddress, setAccountAddress] = useState(null);
-  // const isConnectedToPeraWallet = !!accountAddress;
-  setIsConnectedToWallet(!!accountAddress);
+  const isConnectedToPeraWallet = !!accountAddress;
   const peraWallet = new PeraWalletConnect();
 
   const { accountInformationState, refetchAccountDetail } = useGetAccountDetailRequest({
@@ -260,7 +257,7 @@ export default function Account(props) {
 
   return (
     <>
-      {!isConnectedToWallet ? (
+      {!isConnectedToPeraWallet ? (
         <>
           <MHidden width="smDown">
             <Button
