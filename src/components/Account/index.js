@@ -91,7 +91,11 @@ const styles = {
 export default function Account(props) {
   const buttonWidthStyle = props.width;
   const setAccountAddressSwap = props.setAccountAddress;
-  const {setPerawallet} = props.setPerawallet;
+  const setPeraWallet = props.setPerawallet;
+  const swapMessage = props.message;
+  const peraWallet = props.pera;
+  // const accountAddress=props.address; 
+  const setPropsAccountAddress=props.setAddress;
   console.log(props);
   const { themeMode } = useSettings();
   const classes = useStyles();
@@ -131,7 +135,7 @@ export default function Account(props) {
 
   const [accountAddress, setAccountAddress] = useState(null);
   const isConnectedToPeraWallet = !!accountAddress;
-  const peraWallet = new PeraWalletConnect();
+  // const peraWallet = new PeraWalletConnect();
 
   const { accountInformationState, refetchAccountDetail } = useGetAccountDetailRequest({
     chain: 'mainnet',
@@ -154,26 +158,36 @@ export default function Account(props) {
     if (accountInformationState.data) {
       handleAssets();
     }
+    console.log("accountInformationState");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountInformationState]);
 
   useEffect(() => {
     // Reconnect to the session when the component is mounted
-    peraWallet
-      .reconnectSession()
-      .then((accounts) => {
-        peraWallet.connector.on('disconnect', peraWalletDisconnect);
-        handleSetLog('Connected to Pera Wallet');
-        if (accounts.length) {
-          console.log("setAccou");
-          setAccountAddress(accounts[0]);
-          
-          setAccountAddressSwap(accounts[0]);
-          setPerawallet(peraWallet);
-        }
-      })
-      .catch((e) => console.log(e));
+    console.log("Reconnect to the session when the component is mounted");
+    if (peraWallet)
+      peraWallet
+        .reconnectSession()
+        .then((accounts) => {
+          peraWallet.connector.on('disconnect', peraWalletDisconnect);
+          handleSetLog('Connected to Pera Wallet');
+          if (accounts.length) {
+            console.log("setAccou");
+            setAccountAddress(accounts[0]);
+            setAccountAddressSwap(accounts[0]);
+            setPropsAccountAddress(accounts[0]);
+            setPeraWallet(peraWallet);
+            console.log("reconnectionsessiong");
+          }
+        })
+        .catch((e) => console.log(e));
   }, []);
+
+  useEffect(() => {
+    // Reconnect to the session when the component is mounted
+    if (swapMessage !== '' && swapMessage != null)
+      handleSetLog('✅ Swap executed successfully!');
+  }, [swapMessage]);
 
   const peraWalletConnect = async () => {
     await peraWallet
@@ -185,7 +199,8 @@ export default function Account(props) {
         setAccountAddress(newAccounts[0]);
         console.log(peraWallet);
         setAccountAddressSwap(newAccounts[0]);
-        setPerawallet(peraWallet);
+        setPropsAccountAddress(newAccounts[0]);
+        setPeraWallet(peraWallet);
       })
       .catch((error) => {
         if (error?.data?.type !== 'CONNECT_MODAL_CLOSED') {

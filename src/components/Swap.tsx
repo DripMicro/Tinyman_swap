@@ -45,11 +45,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary
-  },
   avatar: {
     backgroundColor: blue[100],
     color: blue[600]
@@ -78,7 +73,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Swap() {
+export default function Swap(props: { pera: PeraWalletConnect; address: string; setAddress: any }) {
+  const { pera, address, setAddress } = props;
   const classes = useStyles();
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
@@ -97,8 +93,10 @@ export default function Swap() {
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
 
+  const [message, setMessage] = useState('');
+
   // const [accountAddress, setAccountAddress] = useState('');
-  const pera = new PeraWalletConnect();
+  // const pera = new PeraWalletConnect();
 
   const [perawallet, setPerawallet] = useState<PeraWalletConnect>(pera);
 
@@ -128,22 +126,31 @@ export default function Swap() {
       selectedAsset1TokenDecimal,
       true
     );
+    console.log(selectedAsset1TokenDecimal);
+    console.log(selectedAsset2TokenDecimal);
+    console.log(selectedAsset1TokenNumber);
+    console.log(selectedAsset2TokenNumber);
   };
 
-  const handleSwap = () => {
-    if (accountAddress && accountAddress.length > 0 && perawallet !== undefined) {
-      console.log(accountAddress);
+  const handleSwap = async () => {
+    if (address && address.length > 0 && perawallet !== undefined) {
+      console.log(address);
       fixedInputSwap({
         asset_1: selectedAsset1TokenNumber,
         asset_2: selectedAsset2TokenNumber,
         amount: assetAmount1,
         assetInDecimal: selectedAsset1TokenDecimal,
         assetOutDecimal: selectedAsset2TokenDecimal,
-        account: accountAddress,
-        perawallet
+        account: address,
+        perawallet,
+        setMessage
       });
     }
   };
+
+  useEffect(() => {
+    console.log(address);
+  }, [message, address]);
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
     if (num !== selectedAsset2TokenNumber || swap === true) {
@@ -222,13 +229,13 @@ export default function Swap() {
 
   return (
     <div className={classes.root}>
-      <Grid container className={classes.label} spacing={3}>
+      <Grid container className={classes.label}>
         <Grid item xs>
           From
         </Grid>
       </Grid>
       {/* Asset1 */}
-      <Grid container className={classes.assets} spacing={3}>
+      <Grid container className={classes.assets}>
         <Grid item xs>
           <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset1}>
             <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
@@ -298,7 +305,7 @@ export default function Swap() {
       </Grid>
 
       {/* Asset2 */}
-      <Grid container className={classes.assets} spacing={3}>
+      <Grid container className={classes.assets}>
         <Grid item xs>
           <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset2}>
             <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
@@ -359,9 +366,9 @@ export default function Swap() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item xs className={classes.connectButton}>
-          {accountAddress && accountAddress.length > 0 ? (
+          {address && address.length > 0 ? (
             <Button
               onClick={handleSwap}
               variant="contained"
@@ -385,7 +392,15 @@ export default function Swap() {
               Swap
             </Button>
           ) : (
-            <Account width="100%" setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} />
+            <Account
+              width="100%"
+              setAccountAddress={setAccountAddress}
+              setPerawallet={setPerawallet}
+              pera={pera}
+              message={message}
+              address={props.address}
+              setAddress={props.setAddress}
+            />
           )}
         </Grid>
       </Grid>
@@ -439,7 +454,6 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
       })
     );
     setBalanceList(newArr);
-    console.log(newArr);
   };
 
   useEffect(() => {
@@ -453,7 +467,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
         <List>
           {balanceList.map((item: any) => (
             <MenuItem
-              key={item['asset-id']}
+              key={item.tokenNumber}
               sx={{ typography: 'body2', py: 1, px: 2.5 }}
               onClick={() =>
                 handleListItemClick(item.params.name, item.tokenNumber, item.params['unit-name'], item.params.decimals)

@@ -38,7 +38,7 @@ export default function CardSwap(props) {
   return (
     <Card className={classes.root} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
       <div className="widget_parent">
-        <Swap/>
+        <Swap pera={props.pera} address={props.address} setAddress={props.setAddress} />
       </div>
     </Card>
   );
