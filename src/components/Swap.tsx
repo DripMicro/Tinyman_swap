@@ -73,8 +73,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Swap(props: { pera: PeraWalletConnect }) {
-  const { pera } = props;
+export default function Swap(props: { pera: PeraWalletConnect; address: string; setAddress: any }) {
+  const { pera, address, setAddress } = props;
   const classes = useStyles();
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
@@ -133,15 +133,15 @@ export default function Swap(props: { pera: PeraWalletConnect }) {
   };
 
   const handleSwap = async () => {
-    if (accountAddress && accountAddress.length > 0 && perawallet !== undefined) {
-      console.log(accountAddress);
+    if (address && address.length > 0 && perawallet !== undefined) {
+      console.log(address);
       fixedInputSwap({
         asset_1: selectedAsset1TokenNumber,
         asset_2: selectedAsset2TokenNumber,
         amount: assetAmount1,
         assetInDecimal: selectedAsset1TokenDecimal,
         assetOutDecimal: selectedAsset2TokenDecimal,
-        account: accountAddress,
+        account: address,
         perawallet,
         setMessage
       });
@@ -149,8 +149,8 @@ export default function Swap(props: { pera: PeraWalletConnect }) {
   };
 
   useEffect(() => {
-    console.log(message);
-  }, [message]);
+    console.log(address);
+  }, [message, address]);
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
     if (num !== selectedAsset2TokenNumber || swap === true) {
@@ -368,7 +368,7 @@ export default function Swap(props: { pera: PeraWalletConnect }) {
 
       <Grid container>
         <Grid item xs className={classes.connectButton}>
-          {accountAddress && accountAddress.length > 0 ? (
+          {address && address.length > 0 ? (
             <Button
               onClick={handleSwap}
               variant="contained"
@@ -398,6 +398,8 @@ export default function Swap(props: { pera: PeraWalletConnect }) {
               setPerawallet={setPerawallet}
               pera={pera}
               message={message}
+              address={props.address}
+              setAddress={props.setAddress}
             />
           )}
         </Grid>

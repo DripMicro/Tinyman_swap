@@ -23,7 +23,7 @@ export default function Swap(props) {
             Swap your stablecoins from one network to another. You can use them later to tokenize assets.
             </Typography>
             <Grid spacing={10} justifyContent="center" display='flex' alignItems="center" alignContent='center'>
-                <CardSwap pera={props.pera} />
+                <CardSwap pera={props.pera} address={props.address} setAddress={props.setAddress} />
             </Grid>
         </Container>
     </RootStyle>

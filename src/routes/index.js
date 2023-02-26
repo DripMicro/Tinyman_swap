@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { useRoutes, useLocation, Navigate } from 'react-router-dom';
 import { PeraWalletConnect } from '@perawallet/connect';
 // layouts
@@ -40,17 +40,19 @@ const Loadable = (Component) => (props) => {
 const pera = new PeraWalletConnect();
 
 export default function Router() {
+  const [accountAddress, setAccountAddress] = useState(null);
+
   return useRoutes([
     // Main Routes
     {
       path: '/',
-      element: <MainLayout pera={pera} />,
+      element: <MainLayout pera={pera} address={accountAddress} setAddress={setAccountAddress} />,
       children: [
         { path: '/', element: <FiatPage /> },
         { path: '/fiat', element: <FiatPage /> },
         { path: '/invest', element: <PrivacyPage /> },
         { path: '/stake', element: <TermsPage /> },
-        { path: '/swap', element: <SwapPage pera={pera} /> },
+        { path: '/swap', element: <SwapPage pera={pera} address={accountAddress} setAddress={setAccountAddress} /> },
         { path: '/invest_detail', element: <InvestEquity /> },
         { path: '/team', element: <TeamPage /> },
         { path: '/ecosystem', element: <Ecosystem /> },

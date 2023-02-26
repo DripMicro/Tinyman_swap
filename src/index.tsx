@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
@@ -69,6 +71,7 @@ const helmetContext = {};
 // ----------------------------------------------------------------------
 ReactDOM.render(
   <StrictMode>
+    {/* <Provider store={store}> */}
     <HelmetProvider>
       <SettingsProvider>
         <BrowserRouter>
@@ -76,6 +79,7 @@ ReactDOM.render(
         </BrowserRouter>
       </SettingsProvider>
     </HelmetProvider>
+    {/* </Provider> */}
   </StrictMode>,
   document.getElementById('root')
 );

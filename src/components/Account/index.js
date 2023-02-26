@@ -94,6 +94,8 @@ export default function Account(props) {
   const setPeraWallet = props.setPerawallet;
   const swapMessage = props.message;
   const peraWallet = props.pera;
+  // const accountAddress=props.address; 
+  const setPropsAccountAddress=props.setAddress;
   console.log(props);
   const { themeMode } = useSettings();
   const classes = useStyles();
@@ -162,6 +164,7 @@ export default function Account(props) {
 
   useEffect(() => {
     // Reconnect to the session when the component is mounted
+    console.log("Reconnect to the session when the component is mounted");
     if (peraWallet)
       peraWallet
         .reconnectSession()
@@ -172,6 +175,7 @@ export default function Account(props) {
             console.log("setAccou");
             setAccountAddress(accounts[0]);
             setAccountAddressSwap(accounts[0]);
+            setPropsAccountAddress(accounts[0]);
             setPeraWallet(peraWallet);
             console.log("reconnectionsessiong");
           }
@@ -195,6 +199,7 @@ export default function Account(props) {
         setAccountAddress(newAccounts[0]);
         console.log(peraWallet);
         setAccountAddressSwap(newAccounts[0]);
+        setPropsAccountAddress(newAccounts[0]);
         setPeraWallet(peraWallet);
       })
       .catch((error) => {

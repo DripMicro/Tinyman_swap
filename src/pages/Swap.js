@@ -25,7 +25,7 @@ export default function SwapPage(props) {
   return (
     <RootStyle title="App | Backed Capital" id="move_top">
       <ContentStyle>
-          <Swap pera={props.pera} />
+        <Swap pera={props.pera} address={props.address} setAddress={props.setAddress} />
       </ContentStyle>
     </RootStyle>
   );
