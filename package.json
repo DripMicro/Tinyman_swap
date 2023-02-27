@@ -6,7 +6,7 @@
   "scripts": {
     "nodestart": "ts-node ./src/index.ts",
     "start": "rm -rf tsconfig.json && react-scripts start",
-    "build": "rm -rf tsconfig.json && mraf node_modules/@tinymanorg/tinyman-js-sdk/node_modules && react-scripts build",
+    "build": "rm -rf tsconfig.json && rm -r node_modules/@tinymanorg/tinyman-js-sdk/node_modules && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx ./src",
