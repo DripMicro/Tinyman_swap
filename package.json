@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "nodestart": "ts-node ./src/index.ts",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "rm -rf tsconfig.json && react-scripts start",
+    "build": "rm -rf tsconfig.json && rimraf node_modules/@tinymanorg/tinyman-js-sdk/node_modules && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx ./src",
