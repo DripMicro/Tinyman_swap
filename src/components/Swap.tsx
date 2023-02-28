@@ -1,4 +1,5 @@
-import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+
 import { PeraWalletConnect } from '@perawallet/connect';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -164,7 +165,7 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   }, [address]);
 
   useEffect(() => {
-    console.log(message);
+    console.log(address);
   }, [message]);
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
