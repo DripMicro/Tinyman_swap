@@ -36,7 +36,19 @@ export const tokenValue = (value, decimals) => {
   for (let i = 0; i < decimals; i += 1) {
     pattern += '0';
   }
-  return numeral(value).format(`0,0.[${pattern}]`);
+  const amount = value / 10 ** decimals;
+
+  return numeral(amount).format(`0,0.[${pattern}]`);
+};
+
+export const tokenAlgoValue = (value, decimals) => {
+  let pattern = '';
+  for (let i = 0; i < decimals; i += 1) {
+    pattern += '0';
+  }
+  const amount = value;
+
+  return numeral(amount).format(`0,0.[${pattern}]`);
 };
 
 /**

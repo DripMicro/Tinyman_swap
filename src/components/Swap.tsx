@@ -16,9 +16,11 @@ import useSettings from '../hooks/useSettings';
 import { fixedInput } from '../operation/swap/fixedInput';
 import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
 import { fixedOutput } from '../operation/swap/fixedOutput';
-import { getAssetByID } from '../utils/accountUtils';
+import { getAccountBalance, getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
+import { tokenValue } from '../helpers/formatters';
+import useGetAccountDetailRequest from '../hooks/useGetAccountDetailRequest';
 
 const tokenlist = [
   {
@@ -70,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
   },
   connectButton: {
     marginTop: '30px'
+  },
+  assetBalance: {
+    marginLeft: '20px'
   }
 }));
 
@@ -92,6 +97,9 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
+
+  const [assetBalance1, setAssetBalance1] = useState('0');
+  const [assetBalance2, setAssetBalance2] = useState('0');
 
   const [message, setMessage] = useState('');
 
@@ -274,6 +282,13 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               </Box>
             </Box>
           </MenuItem>
+          {address && address.length > 0 ? (
+            <Typography className={classes.assetBalance} variant="body1" sx={{ color: 'text.secondary' }} noWrap>
+              Balance: {assetBalance1} {selectedAsset1TokenUnitName}
+            </Typography>
+          ) : (
+            ''
+          )}
           <SelectTokenDialog
             selectedAssetTokenName={selectedAsset1TokenName}
             selectedAssetTokenNumber={selectedAsset1TokenNumber}
@@ -344,6 +359,13 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               </Box>
             </Box>
           </MenuItem>
+          {address && address.length > 0 ? (
+            <Typography className={classes.assetBalance} variant="body1" sx={{ color: 'text.secondary' }} noWrap>
+              Balance: {assetBalance2} {selectedAsset2TokenUnitName}
+            </Typography>
+          ) : (
+            ''
+          )}
           <SelectTokenDialog
             selectedAssetTokenName={selectedAsset2TokenName}
             selectedAssetTokenNumber={selectedAsset2TokenNumber}
@@ -427,7 +449,9 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
     selectedAssetTokenDecimal,
     open
   } = props;
-  const [balanceList, setBalanceList] = useState<Array<{ params: any; tokenName: string; tokenNumber: number }>>([]);
+  const [balanceList, setBalanceList] = useState<
+    Array<{ params: any; tokenName: string; tokenNumber: number; amount: number }>
+  >([]);
 
   const handleClose = () => {
     onClose(
@@ -453,6 +477,7 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
         };
       })
     );
+    console.log(newArr);
     setBalanceList(newArr);
   };
 
