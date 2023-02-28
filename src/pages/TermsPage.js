@@ -22,7 +22,7 @@ export default function TermsPage() {
   return (
     <RootStyle title="App | Backed Capital" id="move_top">
       <ContentStyle>
-          <Content />
+          {/* <Content /> */}
       </ContentStyle>
     </RootStyle>
   );

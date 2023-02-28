@@ -18,11 +18,11 @@ const menuConfig = [
     path: 'swap',
     icon: <Icon icon={homeFill} {...ICON_SIZE} />
   },
-  {
-    title: 'Invest',
-    path: 'invest',
-    icon: <Icon icon={homeFill} {...ICON_SIZE} />
-  },
+  // {
+  //   title: 'Invest',
+  //   path: 'invest',
+  //   icon: <Icon icon={homeFill} {...ICON_SIZE} />
+  // },
   {
     title: 'Stake',
     path: 'stake',
