@@ -20,14 +20,14 @@ https://github.com/tinymanorg/tinyman-js-sdk
 
 feedback: 
 
-1. show "Account" section on header
+// 1. show "Account" section on header
 2. want to show list of token with the green shield
 3. display alert when the swap was completed(you can see my connect wallet alert and use it)
 4. sync with connect wallet
 when I connect to wallet, the connect wallet button in swap componet need to change swap button, and reverse is too
 and after finish the swap, automatically update the balanc on the right top balance menu
 5. fix token balance decimal
-6. remove "invest" page and also delete all components related "Stake".
+//6. remove "invest" page and also delete all components related "Stake".
 but not delete "Stake" menu and convert it to "Custody"
 7. Show token balance in the Swap component.
 

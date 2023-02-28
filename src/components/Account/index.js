@@ -22,7 +22,7 @@ import axios from 'axios';
 import { createVeriffFrame, MESSAGES } from '@veriff/incontext-sdk';
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
-import { getEllipsisTxt, tokenValue } from '../../helpers/formatters';
+import { getEllipsisTxt, tokenValue, tokenAlgoValue } from '../../helpers/formatters';
 import { MHidden, MIconButton } from '../@material-extend';
 
 
@@ -897,11 +897,11 @@ export default function Account(props) {
                       </Box>
                       <Box display="flex" alignItems="flex-end" justifyContent="center" flexDirection="column">
                         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                          {tokenValue(getAccountBalance(accountInformationState.data.amount), 3)}
+                          {tokenAlgoValue(getAccountBalance(accountInformationState.data.amount), 6)}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                          ≈ $0
-                        </Typography>
+                        {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          
+                        </Typography> */}
                       </Box>
                     </Box>
                   </MenuItem>
@@ -945,9 +945,9 @@ export default function Account(props) {
                           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                             {tokenValue(item.amount, item.params.decimals)}
                           </Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                             ≈ $0
-                          </Typography>
+                          </Typography> */}
                         </Box>
                       </Box>
                     </MenuItem>

@@ -51,7 +51,7 @@ export default function Router() {
         { path: '/', element: <FiatPage /> },
         { path: '/fiat', element: <FiatPage /> },
         { path: '/invest', element: <PrivacyPage /> },
-        { path: '/stake', element: <TermsPage /> },
+        { path: '/custody', element: <TermsPage /> },
         { path: '/swap', element: <SwapPage pera={pera} address={accountAddress} setAddress={setAccountAddress} /> },
         { path: '/invest_detail', element: <InvestEquity /> },
         { path: '/team', element: <TeamPage /> },

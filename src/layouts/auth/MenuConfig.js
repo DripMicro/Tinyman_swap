@@ -38,7 +38,7 @@ const menuConfig = [
   //   ]
   // },
   {
-    title: 'Stake',
+    title: 'Custody',
     path: 'stake',
     icon: <Icon icon={homeFill} {...ICON_SIZE} />
   }
