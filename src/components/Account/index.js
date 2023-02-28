@@ -126,6 +126,7 @@ export default function Account(props) {
   const [isLogin, setIsLogin] = useState(localStorage.getItem('user_data'));
   const [isAuthModalVisible, setIsAuthModalVisible] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [dropdownWallet, setDropdownWallet] = useState(false);
   const [balanceList, setBalanceList] = useState([]);
   const anchorRef = useRef(null);
 
@@ -215,6 +216,8 @@ export default function Account(props) {
 
   useEffect(() => {
     // Reconnect to the session when the component is mounted
+    console.log("swaped");
+    console.log(swapMessage);
     if (swapMessage !== '' && swapMessage != null)
       handleSetLog('✅ Swap executed successfully!');
   }, [swapMessage]);
@@ -811,7 +814,7 @@ export default function Account(props) {
           <Box sx={{ position: 'relative' }}>
             <Button
               onClick={() => {
-                setDropdown(!dropdown);
+                setDropdownWallet(!dropdownWallet);
               }}
               ref={anchorRef}
               variant="contained"
@@ -835,8 +838,8 @@ export default function Account(props) {
               {getEllipsisTxt(accountAddress, 6)} <Icon icon={homeFill} fontSize={20} />
             </Button>
             <MenuPopover
-              open={dropdown}
-              onClose={() => setDropdown(false)}
+              open={dropdownWallet}
+              onClose={() => setDropdownWallet(false)}
               anchorEl={anchorRef.current}
               sx={{ width: 300 }}
             >

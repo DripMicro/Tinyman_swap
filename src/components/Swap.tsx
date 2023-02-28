@@ -30,16 +30,19 @@ const tokenlist = [
     tokenNumber: 31566704
   },
   {
-    tokenNumber: 388592191
-  },
-  {
     tokenNumber: 793124631
   },
   {
-    tokenNumber: 571576867
+    tokenNumber: 287867876
   },
   {
-    tokenNumber: 226701642
+    tokenNumber: 386192725
+  },
+  {
+    tokenNumber: 444035862
+  },
+  {
+    tokenNumber: 465865291
   }
 ];
 
@@ -158,7 +161,11 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
   useEffect(() => {
     console.log(address);
-  }, [message, address]);
+  }, [address]);
+
+  useEffect(() => {
+    console.log(message);
+  }, [message]);
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
     if (num !== selectedAsset2TokenNumber || swap === true) {
