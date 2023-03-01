@@ -95,19 +95,17 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
   const [selectedAsset1TokenUnitName, setSelectedAsset1TokenUnitName] = useState('ALGO');
   const [selectedAsset1TokenDecimal, setSelectedAsset1TokenDecimal] = useState(6);
-  const [selectedAsset1TokenBalance, setSelectedAsset1TokenBalance] = useState(0);
 
   const [selectedAsset2TokenName, setSelectedAsset2TokenName] = useState('USDC');
   const [selectedAsset2TokenNumber, setSelectedAsset2TokenNumber] = useState(tokenlist[1].tokenNumber);
   const [selectedAsset2TokenUnitName, setSelectedAsset2TokenUnitName] = useState('USDC');
   const [selectedAsset2TokenDecimal, setSelectedAsset2TokenDecimal] = useState(6);
-  const [selectedAsset2TokenBalance, setSelectedAsset2TokenBalance] = useState(0);
 
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
 
-  const [assetBalance1, setAssetBalance1] = useState('0');
-  const [assetBalance2, setAssetBalance2] = useState('0');
+  const [assetBalance1, setAssetBalance1] = useState(0);
+  const [assetBalance2, setAssetBalance2] = useState(0);
 
   const [message, setMessage] = useState('');
 
@@ -130,7 +128,8 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
   const { accountInformationState, refetchAccountDetail } = useGetAccountDetailRequest({
     chain: 'mainnet',
-    accountAddress: address || ''
+    accountAddress: address || '',
+    message
   });
   // const [accountAddress, setAccountAddress] = useState('');
   // const pera = new PeraWalletConnect();
@@ -163,6 +162,8 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
       selectedAsset1TokenDecimal,
       true
     );
+    setAssetBalance1(assetBalance2);
+    setAssetBalance2(assetBalance1);
     console.log(selectedAsset1TokenDecimal);
     console.log(selectedAsset2TokenDecimal);
     console.log(selectedAsset1TokenNumber);
@@ -194,6 +195,62 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
     onAddNote(message);
   }, [message]);
 
+  useEffect(() => {
+    console.log(selectedAsset1TokenNumber);
+    if (address.length > 0) {
+      if (selectedAsset1TokenNumber !== 0) {
+        const api = async () => {
+          const data1 = await fetch(
+            `https://node.algoexplorerapi.io/v2/accounts/${address}/assets/${selectedAsset1TokenNumber}`,
+            {
+              method: 'GET'
+            }
+          );
+          const jsonData1 = await data1.json();
+          if (Object.keys(jsonData1).length > 1) {
+            setAssetBalance1(tokenValue(jsonData1['asset-holding'].amount, selectedAsset1TokenDecimal));
+            console.log(assetBalance1);
+          } else {
+            setAssetBalance1(0);
+          }
+        };
+        try {
+          api();
+        } catch (e) {
+          setAssetBalance1(0);
+        }
+      } else if (accountInformationState.data) {
+        console.log(accountInformationState.data);
+        setAssetBalance1(tokenAlgoValue(getAccountBalance(accountInformationState.data.amount), 6));
+        console.log(assetBalance1);
+      }
+
+      if (selectedAsset2TokenNumber !== 0) {
+        const api = async () => {
+          const data2 = await fetch(
+            `https://node.algoexplorerapi.io/v2/accounts/${address}/assets/${selectedAsset2TokenNumber}`,
+            {
+              method: 'GET'
+            }
+          );
+          const jsonData2 = await data2.json();
+          console.log(Object.keys(jsonData2).length);
+          if (Object.keys(jsonData2).length > 1) {
+            setAssetBalance2(tokenValue(jsonData2['asset-holding'].amount, selectedAsset2TokenDecimal));
+            console.log(assetBalance2);
+          } else {
+            setAssetBalance2(0);
+          }
+        };
+        api();
+        console.log(assetBalance2);
+      } else if (accountInformationState.data) {
+        setAssetBalance2(tokenAlgoValue(getAccountBalance(accountInformationState.data.amount), 6));
+        console.log(assetBalance2);
+      }
+    }
+  }, [openAsset1, openAsset2, address, accountInformationState, openAsset1, openAsset2, message]);
+
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
     if (num !== selectedAsset2TokenNumber || swap === true) {
       setOpenAsset1(false);
@@ -202,8 +259,6 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
         setSelectedAsset1TokenDecimal(6);
         setSelectedAsset1TokenName('Algorand');
         setSelectedAsset1TokenUnitName('ALGO');
-        if (accountInformationState.data)
-          setSelectedAsset1TokenBalance(tokenAlgoValue(getAccountBalance(accountInformationState.data.amount), 6));
       } else {
         setSelectedAsset1TokenDecimal(decimal);
         setSelectedAsset1TokenName(name);
@@ -549,56 +604,62 @@ function SelectTokenDialog(props: SelectTokenDialogProps) {
       <DialogTitle id="form-dialog-title">Select an asset</DialogTitle>
       <DialogContent>
         <List>
-          {balanceList.map((item: any) => (
-            <MenuItem
-              key={item.tokenNumber}
-              sx={{ typography: 'body2', py: 1, px: 2.5 }}
-              onClick={() =>
-                handleListItemClick(item.params.name, item.tokenNumber, item.params['unit-name'], item.params.decimals)
-              }
-            >
-              <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
-                <Box display="flex" alignItems="center">
-                  <Box
-                    component="img"
-                    src={`https://asa-list.tinyman.org/assets/${item.tokenNumber}/icon.png`}
-                    alt="Asset logo"
-                    sx={{
-                      mr: 2,
-                      width: 24,
-                      height: 24
-                    }}
-                  />
-                  <Box>
-                    <Box display="flex" alignItems="center" gap={1}>
-                      <Typography variant="subtitle1" noWrap>
-                        {item.tokenNumber === 0 ? 'Algorand' : item.params.name}
+          {balanceList &&
+            balanceList.map((item: any) => (
+              <MenuItem
+                key={item.tokenNumber}
+                sx={{ typography: 'body2', py: 1, px: 2.5 }}
+                onClick={() =>
+                  handleListItemClick(
+                    item.params.name,
+                    item.tokenNumber,
+                    item.params['unit-name'],
+                    item.params.decimals
+                  )
+                }
+              >
+                <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
+                  <Box display="flex" alignItems="center">
+                    <Box
+                      component="img"
+                      src={`https://asa-list.tinyman.org/assets/${item.tokenNumber}/icon.png`}
+                      alt="Asset logo"
+                      sx={{
+                        mr: 2,
+                        width: 24,
+                        height: 24
+                      }}
+                    />
+                    <Box>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="subtitle1" noWrap>
+                          {item.tokenNumber === 0 ? 'Algorand' : item.params.name}
+                        </Typography>
+                        <Tooltip title="Trusted asset by Pera" arrow>
+                          <Box
+                            component="img"
+                            src="/static/token/trust.svg"
+                            alt="Asset logo"
+                            sx={{
+                              width: 16,
+                              height: 16
+                            }}
+                          />
+                        </Tooltip>
+                      </Box>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                        {item.tokenNumber === 0 ? 'ALGO' : item.params['unit-name']}
                       </Typography>
-                      <Tooltip title="Trusted asset by Pera" arrow>
-                        <Box
-                          component="img"
-                          src="/static/token/trust.svg"
-                          alt="Asset logo"
-                          sx={{
-                            width: 16,
-                            height: 16
-                          }}
-                        />
-                      </Tooltip>
                     </Box>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      {item.tokenNumber === 0 ? 'ALGO' : item.params['unit-name']}
+                  </Box>
+                  <Box display="flex" alignItems="flex-end" justifyContent="center" flexDirection="column">
+                    <Typography variant="body2" sx={{ color: 'text.secondary', ml: 10 }} noWrap>
+                      {item.tokenNumber}
                     </Typography>
                   </Box>
                 </Box>
-                <Box display="flex" alignItems="flex-end" justifyContent="center" flexDirection="column">
-                  <Typography variant="body2" sx={{ color: 'text.secondary', ml: 10 }} noWrap>
-                    {item.tokenNumber}
-                  </Typography>
-                </Box>
-              </Box>
-            </MenuItem>
-          ))}
+              </MenuItem>
+            ))}
         </List>
       </DialogContent>
     </Dialog>

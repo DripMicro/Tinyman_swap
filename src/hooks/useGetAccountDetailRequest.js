@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { getAccountInformation } from '../utils/accountUtils';
 import useAsyncProcess from './useAsyncProcess';
 
-export default function useGetAccountDetailRequest({ chain, accountAddress }) {
+export default function useGetAccountDetailRequest({ chain, accountAddress, message }) {
   const { state: accountInformationState, runAsyncProcess: runGetAccountInformationAsyncProcess } = useAsyncProcess();
   const refetchAccountDetail = useCallback(() => {
     if (chain && accountAddress) {
@@ -13,7 +13,7 @@ export default function useGetAccountDetailRequest({ chain, accountAddress }) {
         console.log(error);
       }
     }
-  }, [accountAddress, chain, runGetAccountInformationAsyncProcess]);
+  }, [accountAddress, chain, runGetAccountInformationAsyncProcess, message]);
 
   useEffect(() => {
     refetchAccountDetail();

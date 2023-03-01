@@ -15,7 +15,7 @@ import tick from '@iconify/icons-ant-design/check-circle-filled';
 import logoutBtn from '@iconify/icons-ant-design/poweroff';
 import contentCopy from '@iconify/icons-ic/content-copy';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { PeraWalletConnect } from '@perawallet/connect';
+// import { PeraWalletConnect } from '@perawallet/connect';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 
@@ -197,7 +197,8 @@ export default function Account(props) {
 
   const { accountInformationState, refetchAccountDetail } = useGetAccountDetailRequest({
     chain: 'mainnet',
-    accountAddress: accountAddress || ''
+    accountAddress: accountAddress || '',
+    message
   });
 
   useEffect(() => {
@@ -211,14 +212,14 @@ export default function Account(props) {
           };
         })
       );
-      setBalanceList(...balanceList, newArr);
+      setBalanceList(newArr);
     };
     if (accountInformationState.data) {
       handleAssets();
     }
     console.log("accountInformationState");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountInformationState]);
+  }, [accountInformationState, message]);
 
   useEffect(() => {
     // Reconnect to the session when the component is mounted
@@ -936,7 +937,7 @@ export default function Account(props) {
                       </Box>
                     </Box>
                   </MenuItem>
-                  {balanceList.map((item) => (
+                  {balanceList && balanceList.map((item) => (
                     <MenuItem key={item['asset-id']} sx={{ typography: 'body2', py: 1, px: 2.5 }}>
                       <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
                         <Box display="flex" alignItems="center">
