@@ -180,9 +180,9 @@ export async function FixedInputSwap({
     });
     console.log('✅ Fixed Input Swap executed successfully!');
     console.log({ txnID: swapExecutionResponse.txnID });
-    setMessage('✅ Fixed Input Swap executed successfully!');
+    setMessage('Swap executed successfully!');
 
-    return '✅ Fixed Input Swap executed successfully!';
+    return 'xecuted successfully!';
   } catch (e) {
     console.log(e);
     setMessage('Swap failed');

@@ -20,8 +20,9 @@ import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAccountBalance, getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
-import { tokenValue } from '../helpers/formatters';
-import { addNote } from '../store/actions';
+import { getEllipsisTxt, tokenValue, tokenAlgoValue } from '../helpers/formatters';
+import { NotesState } from '../store/notesReducer';
+import { addNote, isConnected } from '../store/actions';
 import useGetAccountDetailRequest from '../hooks/useGetAccountDetailRequest';
 
 const tokenlist = [
@@ -84,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Swap(props: { pera: PeraWalletConnect; address: string; setAddress: any }) {
-  const { pera, address, setAddress } = props;
+  const { pera, setAddress } = props;
   const classes = useStyles();
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
@@ -94,11 +95,13 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   const [selectedAsset1TokenNumber, setSelectedAsset1TokenNumber] = useState(tokenlist[0].tokenNumber);
   const [selectedAsset1TokenUnitName, setSelectedAsset1TokenUnitName] = useState('ALGO');
   const [selectedAsset1TokenDecimal, setSelectedAsset1TokenDecimal] = useState(6);
+  const [selectedAsset1TokenBalance, setSelectedAsset1TokenBalance] = useState(0);
 
   const [selectedAsset2TokenName, setSelectedAsset2TokenName] = useState('USDC');
   const [selectedAsset2TokenNumber, setSelectedAsset2TokenNumber] = useState(tokenlist[1].tokenNumber);
   const [selectedAsset2TokenUnitName, setSelectedAsset2TokenUnitName] = useState('USDC');
   const [selectedAsset2TokenDecimal, setSelectedAsset2TokenDecimal] = useState(6);
+  const [selectedAsset2TokenBalance, setSelectedAsset2TokenBalance] = useState(0);
 
   const [assetAmount1, setAssetAmount1] = useState('');
   const [assetAmount2, setAssetAmount2] = useState('');
@@ -113,6 +116,22 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   const onAddNote = (message: string) => {
     dispatch(addNote(message));
   };
+
+  const onIsConnected = (note: boolean) => {
+    dispatch(isConnected(note));
+  };
+
+  const onConnectWallet = () => {
+    onIsConnected(true);
+  };
+
+  const isConnect = useSelector<NotesState, NotesState['isConnected']>((state) => state.isConnected);
+  const address = useSelector<NotesState, NotesState['walletAddress']>((state) => state.walletAddress);
+
+  const { accountInformationState, refetchAccountDetail } = useGetAccountDetailRequest({
+    chain: 'mainnet',
+    accountAddress: address || ''
+  });
   // const [accountAddress, setAccountAddress] = useState('');
   // const pera = new PeraWalletConnect();
 
@@ -171,7 +190,7 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   }, [address]);
 
   useEffect(() => {
-    console.log(address);
+    console.log(message);
     onAddNote(message);
   }, [message]);
 
@@ -183,6 +202,8 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
         setSelectedAsset1TokenDecimal(6);
         setSelectedAsset1TokenName('Algorand');
         setSelectedAsset1TokenUnitName('ALGO');
+        if (accountInformationState.data)
+          setSelectedAsset1TokenBalance(tokenAlgoValue(getAccountBalance(accountInformationState.data.amount), 6));
       } else {
         setSelectedAsset1TokenDecimal(decimal);
         setSelectedAsset1TokenName(name);
@@ -405,7 +426,7 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
       <Grid container>
         <Grid item xs className={classes.connectButton}>
-          {address && address.length > 0 ? (
+          {address.length > 0 ? (
             <Button
               onClick={handleSwap}
               variant="contained"
@@ -429,15 +450,38 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               Swap
             </Button>
           ) : (
-            <Account
-              width="100%"
-              setAccountAddress={setAccountAddress}
-              setPerawallet={setPerawallet}
-              pera={pera}
-              message={message}
-              address={props.address}
-              setAddress={props.setAddress}
-            />
+            // <Account
+            //   width="100%"
+            //   setAccountAddress={setAccountAddress}
+            //   setPerawallet={setPerawallet}
+            //   pera={pera}
+            //   message={message}
+            //   address={props.address}
+            //   setAddress={props.setAddress}
+            //   swapbutton
+            // />
+            <Button
+              onClick={onConnectWallet}
+              variant="contained"
+              className="bto"
+              sx={{
+                fontSize: { xs: '10px', md: '12px' },
+                fontFamily: 'Poppins',
+                width: { xs: '100%', md: '100%' },
+                fontWeight: 500,
+                borderRadius: '8px',
+                boxShadow: 'none',
+                background: themeMode === 'dark' ? 'white' : 'black',
+                color: themeMode === 'dark' ? 'black' : 'white',
+                padding: '8px 10px',
+                '&:hover': {
+                  background: themeMode === 'dark' ? 'white' : 'black',
+                  opacity: '80%'
+                }
+              }}
+            >
+              Connect Wallet
+            </Button>
           )}
         </Grid>
       </Grid>

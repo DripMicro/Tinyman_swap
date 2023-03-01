@@ -34,6 +34,8 @@ import MenuPopover from '../MenuPopover';
 
 import UserPool from '../Auth/UserPool';
 
+import { isConnected, getWalletAddress } from "../../store/actions";
+
 import PeraConnectWhiteIcon from './WalletIcons/pera-connect-white.png';
 import PeraConnectBlackIcon from './WalletIcons/pera-connect-black.png';
 import WalletConnectIcon from './WalletIcons/wallet-connect.svg';
@@ -118,9 +120,9 @@ export default function Account(props) {
   const setPeraWallet = props.setPerawallet;
   const swapMessage = props.message;
   const peraWallet = props.pera;
+  const swapButtonflag = props.swapbutton;
   // const accountAddress=props.address; 
   const setPropsAccountAddress=props.setAddress;
-  console.log(props);
   const { themeMode } = useSettings();
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -136,12 +138,24 @@ export default function Account(props) {
   const [veiffToken, setVeriffToken] = useState(null);
   const [veiffUrl, setVeriffUrl] = useState(null);
 
+  const dispatch = useDispatch();
+
+  const onIsConnected = (note) => {
+    dispatch(isConnected(note));
+  };
+
+  const onGetWalletAddress = (note) => {
+    console.log(note);
+    dispatch(getWalletAddress(note));
+  };
+
   const message = useSelector(
     (state) => state.message
   );
 
-
-
+  const isConnect = useSelector(
+    (state) => state.isConnected
+  );
 
   const handleWalletConnect = (connectorId) => {
     switch (connectorId) {
@@ -172,7 +186,13 @@ export default function Account(props) {
   ];
 
   const [accountAddress, setAccountAddress] = useState(null);
-  const isConnectedToPeraWallet = !!accountAddress;
+  const [isConnectedToPeraWallet, setIsConnectedToPeraWallet] = useState(!!accountAddress);
+
+  useEffect(() => {
+    setIsConnectedToPeraWallet(!!accountAddress);
+    console.log(!!accountAddress);
+  }, [accountAddress]);
+
   // const peraWallet = new PeraWalletConnect();
 
   const { accountInformationState, refetchAccountDetail } = useGetAccountDetailRequest({
@@ -212,8 +232,7 @@ export default function Account(props) {
           if (accounts.length) {
             console.log("setAccou");
             setAccountAddress(accounts[0]);
-            setAccountAddressSwap(accounts[0]);
-            setPropsAccountAddress(accounts[0]);
+            onGetWalletAddress(accounts[0]);
             setPeraWallet(peraWallet);
             console.log("reconnectionsessiong");
           }
@@ -222,12 +241,9 @@ export default function Account(props) {
   }, []);
 
   useEffect(() => {
-    // Reconnect to the session when the component is mounted
-    console.log("swaped");
-    console.log(swapMessage);
-    if (swapMessage !== '' && swapMessage != null)
-      handleSetLog('✅ Swap executed successfully!');
-  }, [swapMessage]);
+    if (isConnect)
+      peraWalletConnect();
+  }, [isConnect]);
 
   const peraWalletConnect = async () => {
     await peraWallet
@@ -235,11 +251,8 @@ export default function Account(props) {
       .then((newAccounts) => {
         peraWallet.connector.on('disconnect', peraWalletDisconnect);
         handleSetLog('Connected to Pera Wallet');
-        console.log("setAccou1");
         setAccountAddress(newAccounts[0]);
-        console.log(peraWallet);
-        setAccountAddressSwap(newAccounts[0]);
-        setPropsAccountAddress(newAccounts[0]);
+        onGetWalletAddress(newAccounts[0]);
         setPeraWallet(peraWallet);
       })
       .catch((error) => {
@@ -253,7 +266,8 @@ export default function Account(props) {
     peraWallet.disconnect();
     handleSetLog('Disconnected to Pera Wallet');
     setAccountAddress(null);
-    setAccountAddressSwap(null);
+    onIsConnected(false);
+    onGetWalletAddress('');
   };
 
   const copyToClipboard = (copyText) => {
@@ -305,7 +319,8 @@ export default function Account(props) {
   }, []);
 
   useEffect(() => {
-    handleSetLog(message);
+    if (message.length > 0)
+      handleSetLog(message);
   }, [message]);
 
   
@@ -472,6 +487,7 @@ export default function Account(props) {
 
   return (
     <>
+      {!swapButtonflag ? 
       <Box sx={{ position: 'relative' }}>
         <Typography
           display="flex"
@@ -743,7 +759,7 @@ export default function Account(props) {
             </Grid>
           </Grid>
         )}
-      </Box>
+      </Box> : ""}
       {!isConnectedToPeraWallet ? (
         <>
           <MHidden width="smDown">

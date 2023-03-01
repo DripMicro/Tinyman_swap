@@ -100,7 +100,7 @@ export default function MainNavbar(props) {
             />
           </MHidden>
           <Box sx={{ flexGrow: 1 }} />
-          <Account setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} pera={props.pera}  address={props.address} setAddress={props.setAddress} />
+          <Account setAccountAddress={setAccountAddress} setPerawallet={setPerawallet} pera={props.pera}  address={props.address} setAddress={props.setAddress} swapButton={false}/>
           <Box
             component="img"
             sx={{ width: '32px', cursor: 'pointer', marginLeft: '12px', '&:hover': { opacity: '80%' } }}
