@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 
-import { store } from "./store/store";
+import { store } from './store/store';
 
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
@@ -80,15 +80,15 @@ const helmetContext = {};
 // ----------------------------------------------------------------------
 ReactDOM.render(
   <StrictMode>
-    <Provider store={store}>
-      <HelmetProvider>
-        <SettingsProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </SettingsProvider>
-      </HelmetProvider>
-    </Provider>
+    {/* <Provider store={store}> */}
+    <HelmetProvider>
+      <SettingsProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </SettingsProvider>
+    </HelmetProvider>
+    {/* </Provider> */}
   </StrictMode>,
   document.getElementById('root')
 );
