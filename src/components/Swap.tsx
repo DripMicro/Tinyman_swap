@@ -15,7 +15,7 @@ import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
 import useSettings from '../hooks/useSettings';
 import { fixedInput } from '../operation/swap/fixedInput';
-import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
+import { FixedInputSwap } from '../operation/swap/fixedInputSwap';
 import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAccountBalance, getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
@@ -147,7 +147,7 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   const handleSwap = async () => {
     if (address && address.length > 0 && perawallet !== undefined) {
       console.log(address);
-      fixedInputSwap({
+      FixedInputSwap({
         asset_1: selectedAsset1TokenNumber,
         asset_2: selectedAsset2TokenNumber,
         amount: assetAmount1,

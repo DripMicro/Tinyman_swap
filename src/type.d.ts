@@ -14,7 +14,8 @@ type ArticleAction = {
 };
 
 type SwapAction = {
+  type: string;
   message: string;
 };
 
-type DispatchType = (args: ArticleAction) => ArticleAction;
+type DispatchType = (args: SwapAction) => SwapAction;

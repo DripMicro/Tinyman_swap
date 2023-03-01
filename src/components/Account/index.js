@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState, useRef } from 'react';
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { useSnackbar } from 'notistack';
 import { Grid, Box, Button, Typography, Divider, MenuItem, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -134,6 +135,11 @@ export default function Account(props) {
   const [veiffApprovalStatus, setVeriffStatus] = useState(null);
   const [veiffToken, setVeriffToken] = useState(null);
   const [veiffUrl, setVeriffUrl] = useState(null);
+
+  const message = useSelector(
+    (state) => state.message,
+    shallowEqual
+  );
 
 
   const handleWalletConnect = (connectorId) => {
@@ -460,6 +466,7 @@ export default function Account(props) {
 
   return (
     <>
+      {message}
       <Box sx={{ position: 'relative' }}>
         <Typography
           display="flex"

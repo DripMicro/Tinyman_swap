@@ -9,6 +9,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 
+import { store } from "./store/store";
+
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
 //
@@ -71,22 +73,22 @@ import '@fontsource/nunito/900.css';
 
 const helmetContext = {};
 
-const store: Store<ArticleState, ArticleAction> & {
-  dispatch: DispatchType;
-} = createStore(reducer, applyMiddleware(thunk));
+// const store: Store<string, SwapAction> & {
+//   dispatch: DispatchType;
+// } = createStore(reducer, applyMiddleware(thunk));
 
 // ----------------------------------------------------------------------
 ReactDOM.render(
   <StrictMode>
-    {/* <Provider store={store}> */}
-    <HelmetProvider>
-      <SettingsProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </SettingsProvider>
-    </HelmetProvider>
-    {/* </Provider> */}
+    <Provider store={store}>
+      <HelmetProvider>
+        <SettingsProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </SettingsProvider>
+      </HelmetProvider>
+    </Provider>
   </StrictMode>,
   document.getElementById('root')
 );
