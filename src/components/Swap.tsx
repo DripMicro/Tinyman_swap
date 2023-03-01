@@ -1,4 +1,5 @@
-import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+
 import { PeraWalletConnect } from '@perawallet/connect';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,7 +15,7 @@ import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
 import useSettings from '../hooks/useSettings';
 import { fixedInput } from '../operation/swap/fixedInput';
-import { fixedInputSwap } from '../operation/swap/fixedInputSwap';
+import { FixedInputSwap } from '../operation/swap/fixedInputSwap';
 import { fixedOutput } from '../operation/swap/fixedOutput';
 import { getAccountBalance, getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
@@ -30,16 +31,19 @@ const tokenlist = [
     tokenNumber: 31566704
   },
   {
-    tokenNumber: 388592191
-  },
-  {
     tokenNumber: 793124631
   },
   {
-    tokenNumber: 571576867
+    tokenNumber: 287867876
   },
   {
-    tokenNumber: 226701642
+    tokenNumber: 386192725
+  },
+  {
+    tokenNumber: 444035862
+  },
+  {
+    tokenNumber: 465865291
   }
 ];
 
@@ -143,7 +147,7 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
   const handleSwap = async () => {
     if (address && address.length > 0 && perawallet !== undefined) {
       console.log(address);
-      fixedInputSwap({
+      FixedInputSwap({
         asset_1: selectedAsset1TokenNumber,
         asset_2: selectedAsset2TokenNumber,
         amount: assetAmount1,
@@ -158,7 +162,11 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
   useEffect(() => {
     console.log(address);
-  }, [message, address]);
+  }, [address]);
+
+  useEffect(() => {
+    console.log(address);
+  }, [message]);
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {
     if (num !== selectedAsset2TokenNumber || swap === true) {

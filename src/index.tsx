@@ -1,17 +1,22 @@
 // scroll bar
 import 'simplebar/src/simplebar.css';
-
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import { StrictMode } from 'react';
+
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
+import { createStore, applyMiddleware, Store } from 'redux';
+import thunk from 'redux-thunk';
+
+import { store } from "./store/store";
 
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
 //
 import App from './App';
+import reducer from './store/reducer';
+
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
 import '@fontsource/poppins/100.css';
@@ -68,18 +73,22 @@ import '@fontsource/nunito/900.css';
 
 const helmetContext = {};
 
+// const store: Store<string, SwapAction> & {
+//   dispatch: DispatchType;
+// } = createStore(reducer, applyMiddleware(thunk));
+
 // ----------------------------------------------------------------------
 ReactDOM.render(
   <StrictMode>
-    {/* <Provider store={store}> */}
-    <HelmetProvider>
-      <SettingsProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </SettingsProvider>
-    </HelmetProvider>
-    {/* </Provider> */}
+    <Provider store={store}>
+      <HelmetProvider>
+        <SettingsProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </SettingsProvider>
+      </HelmetProvider>
+    </Provider>
   </StrictMode>,
   document.getElementById('root')
 );
