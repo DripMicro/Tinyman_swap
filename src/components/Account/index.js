@@ -137,9 +137,10 @@ export default function Account(props) {
   const [veiffUrl, setVeriffUrl] = useState(null);
 
   const message = useSelector(
-    (state) => state.message,
-    shallowEqual
+    (state) => state.message
   );
+
+
 
 
   const handleWalletConnect = (connectorId) => {
@@ -303,6 +304,11 @@ export default function Account(props) {
     setWConnector(connector);
   }, []);
 
+  useEffect(() => {
+    handleSetLog(message);
+  }, [message]);
+
+  
   const walletConnect = async () => {
     if (connector.connected) {
       await connector.createSession();
@@ -466,7 +472,6 @@ export default function Account(props) {
 
   return (
     <>
-      {message}
       <Box sx={{ position: 'relative' }}>
         <Typography
           display="flex"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
-
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { PeraWalletConnect } from '@perawallet/connect';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,6 +21,7 @@ import { getAccountBalance, getAssetByID } from '../utils/accountUtils';
 import TokenTemplate from './Swap/TokenTemplate';
 import Account from './Account';
 import { tokenValue } from '../helpers/formatters';
+import { addNote } from '../store/actions';
 import useGetAccountDetailRequest from '../hooks/useGetAccountDetailRequest';
 
 const tokenlist = [
@@ -107,6 +108,11 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
   const [message, setMessage] = useState('');
 
+  const dispatch = useDispatch();
+
+  const onAddNote = (message: string) => {
+    dispatch(addNote(message));
+  };
   // const [accountAddress, setAccountAddress] = useState('');
   // const pera = new PeraWalletConnect();
 
@@ -166,6 +172,7 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
 
   useEffect(() => {
     console.log(address);
+    onAddNote(message);
   }, [message]);
 
   const asset1HandleClose = (name: string, num: number, unit: string, decimal: number, swap: boolean) => {

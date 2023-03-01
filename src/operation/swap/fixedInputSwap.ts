@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { poolUtils, SupportedNetwork, Swap, SwapType } from '@tinymanorg/tinyman-js-sdk';
 import { Account } from 'algosdk';
 import { PeraWalletConnect } from '@perawallet/connect';
 import { Dispatch } from 'redux';
 import { algodClient } from '../../util/client';
 import { sendSwapMessage } from '../../store/actionCreators';
+import { addNote } from '../../store/actions';
 // import signerWithPera from '../../util/initiatorSigner';
 // import signerWithPera from '../../util/perawalletInitiatorSigner';
 
@@ -169,10 +169,6 @@ export async function FixedInputSwap({
   //   initiatorSigner: signerWithPera(account, perawallet)
   // });
 
-  const dispatch: Dispatch<any> = useDispatch();
-
-  const saveArticle = React.useCallback((message: string) => dispatch(sendSwapMessage('article')), [dispatch]);
-
   try {
     const swapExecutionResponse = await Swap.v2.execute({
       network: 'mainnet' as SupportedNetwork,
@@ -185,8 +181,6 @@ export async function FixedInputSwap({
     console.log('✅ Fixed Input Swap executed successfully!');
     console.log({ txnID: swapExecutionResponse.txnID });
     setMessage('✅ Fixed Input Swap executed successfully!');
-
-    saveArticle(' Fixed Swap Complete !');
 
     return '✅ Fixed Input Swap executed successfully!';
   } catch (e) {
