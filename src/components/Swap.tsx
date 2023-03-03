@@ -13,6 +13,8 @@ import { Box, Typography, MenuItem, Tooltip } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import IconButton from '@material-ui/core/IconButton';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { match } from 'assert';
 import useSettings from '../hooks/useSettings';
 import { fixedInput } from '../operation/swap/fixedInput';
 import { FixedInputSwap } from '../operation/swap/fixedInputSwap';
@@ -58,7 +60,11 @@ const useStyles = makeStyles((theme) => ({
     color: blue[600]
   },
   label: {
-    padding: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    paddingLeft: theme.spacing(4)
+  },
+  label1: {
+    paddingLeft: theme.spacing(4)
   },
   assets: {
     padding: theme.spacing(1)
@@ -67,14 +73,24 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'right',
     fontSize: '20px',
     width: '200px',
-    padding: '10px',
+    paddingRight: '20px',
+    paddingTop: '10px',
+    background: 'none',
+    border: 'none',
+    marginTop: '6px'
+  },
+  assetInputMobile: {
+    textAlign: 'left',
+    fontSize: '20px',
+    paddingLeft: '30px',
+    paddingTop: '30px',
     background: 'none',
     border: 'none',
     marginTop: '6px'
   },
   smallIcon: {
     textAlign: 'center',
-    paddingTop: '0px'
+    paddingTop: theme.spacing(1)
   },
   connectButton: {
     marginTop: '30px'
@@ -87,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Swap(props: { pera: PeraWalletConnect; address: string; setAddress: any }) {
   const { pera, setAddress } = props;
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:600px)');
   const { themeMode } = useSettings();
   const [openAsset1, setOpenAsset1] = useState(false);
   const [openAsset2, setOpenAsset2] = useState(false);
@@ -366,11 +383,24 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
                       />
                     </Tooltip>
                   </Box>
+                  {matches ? (
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                      ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
+                    </Typography>
+                  ) : (
+                    ''
+                  )}
+                </Box>
+              </Box>
+              {!matches ? (
+                <Box>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                     ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
                   </Typography>
                 </Box>
-              </Box>
+              ) : (
+                ''
+              )}
             </Box>
           </MenuItem>
           {address && address.length > 0 ? (
@@ -389,17 +419,31 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
             onClose={asset1HandleClose}
           />
         </Grid>
-        <Grid item xs>
-          <input
-            type="number"
-            pattern="[0-9]*"
-            className={classes.assetInput}
-            placeholder="0.00"
-            value={assetAmount1}
-            onChange={handleAsset1AmountChange}
-            style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
-          />
-        </Grid>
+        {matches ? (
+          <Grid item direction="row" justifyContent="flex-end">
+            <input
+              type="number"
+              pattern="[0-9]*"
+              className={classes.assetInput}
+              placeholder="0.00"
+              value={assetAmount1}
+              onChange={handleAsset1AmountChange}
+              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+            />
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <input
+              type="number"
+              pattern="[0-9]*"
+              className={classes.assetInputMobile}
+              placeholder="0.00"
+              value={assetAmount1}
+              onChange={handleAsset1AmountChange}
+              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+            />
+          </Grid>
+        )}
       </Grid>
 
       <Grid container>
@@ -410,6 +454,11 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
         </Grid>
       </Grid>
 
+      <Grid container className={classes.label1}>
+        <Grid item xs>
+          To
+        </Grid>
+      </Grid>
       {/* Asset2 */}
       <Grid container className={classes.assets}>
         <Grid item xs>
@@ -443,11 +492,24 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
                       />
                     </Tooltip>
                   </Box>
+                  {matches ? (
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                      ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
+                    </Typography>
+                  ) : (
+                    ''
+                  )}
+                </Box>
+              </Box>
+              {!matches ? (
+                <Box>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                     ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
                   </Typography>
                 </Box>
-              </Box>
+              ) : (
+                ''
+              )}
             </Box>
           </MenuItem>
           {address && address.length > 0 ? (
@@ -466,17 +528,31 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
             onClose={asset2HandleClose}
           />
         </Grid>
-        <Grid item xs>
-          <input
-            type="number"
-            pattern="[0-9]*"
-            className={classes.assetInput}
-            placeholder="0.00"
-            value={assetAmount2}
-            onChange={handleAsset2AmountChange}
-            style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
-          />
-        </Grid>
+        {matches ? (
+          <Grid item direction="row" justifyContent="flex-end">
+            <input
+              type="number"
+              pattern="[0-9]*"
+              className={classes.assetInput}
+              placeholder="0.00"
+              value={assetAmount2}
+              onChange={handleAsset2AmountChange}
+              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+            />
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <input
+              type="number"
+              pattern="[0-9]*"
+              className={classes.assetInputMobile}
+              placeholder="0.00"
+              value={assetAmount2}
+              onChange={handleAsset2AmountChange}
+              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+            />
+          </Grid>
+        )}
       </Grid>
 
       <Grid container>

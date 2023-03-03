@@ -489,278 +489,280 @@ export default function Account(props) {
   return (
     <>
       {!swapButtonflag ? 
-      <Box sx={{ position: 'relative' }}>
-        <Typography
-          display="flex"
-          style={{ cursor: 'pointer' }}
-          alignItems="center"
-          onClick={() => {
-            setDropdown(!dropdown);
-          }}
-        >
-          Account <Icon icon={homeFill} fontSize={32} style={{ marginRight: 12 }} />
-        </Typography>
-        {dropdown && (
-          <Grid
-            container
-            sx={{
-              display: dropdown ? 'flex' : 'none',
-              position: 'absolute',
-              flexDirection: 'row',
-              minWidth: { xs: 'calc(100vw)', md: '400px' },
-              right: { xs: '-50%', md: '-115%' },
-              padding: { xs: 2, md: 1 },
-              paddingRight: '0 !important',
-              marginTop: { xs: '20px', md: '0' },
-              background: {
-                xs: themeMode === 'dark' ? '#141721' : '#f5f5f5',
-                md: themeMode === 'dark' ? '#141721a3' : '#f5f5f59c'
-              }
+      <MHidden width="smDown">
+        <Box sx={{ position: 'relative' }}>
+          <Typography
+            display="flex"
+            style={{ cursor: 'pointer' }}
+            alignItems="center"
+            onClick={() => {
+              setDropdown(!dropdown);
             }}
           >
+            Account <Icon icon={homeFill} fontSize={32} style={{ marginRight: 12 }} />
+          </Typography>
+          {dropdown && (
             <Grid
-              item
-              xs={6}
-              md={6}
-              display="flex !important"
-              flexDirection="column !important"
-              width="fit-content !important"
+              container
+              sx={{
+                display: dropdown ? 'flex' : 'none',
+                position: 'absolute',
+                flexDirection: 'row',
+                minWidth: { xs: 'calc(100vw)', md: '400px' },
+                right: { xs: '-50%', md: '-115%' },
+                padding: { xs: 2, md: 1 },
+                paddingRight: '0 !important',
+                marginTop: { xs: '20px', md: '0' },
+                background: {
+                  xs: themeMode === 'dark' ? '#141721' : '#f5f5f5',
+                  md: themeMode === 'dark' ? '#141721a3' : '#f5f5f59c'
+                }
+              }}
             >
-              <Typography
-                style={{
-                  fontFamily: 'Public Sans !important',
-                  fontWeight: '400 !important',
-                  fontSize: '1rem !important',
-                  lineHeight: '1.5 !important'
-                }}
+              <Grid
+                item
+                xs={6}
+                md={6}
+                display="flex !important"
+                flexDirection="column !important"
+                width="fit-content !important"
               >
-                Features
-              </Typography>
-              <Box marginTop={2} display="flex" alignItems="flex-start" gap={1}>
-                <Box
-                  sx={{ color: 'red' }}
-                  component="img"
-                  src={themeMode === 'dark' ? '/static/safe.svg' : '/static/safe-dark.svg'}
-                  width="30px !important"
-                />
-                <Box>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Poppins !important',
-                      fontStyle: 'normal !important',
-                      fontWeight: 400,
-                      fontSize: '12px !important',
-                      lineHeight: '16px !important',
-                      letterSpacing: ' 0.02em !important'
-                    }}
-                  >
-                    Asset Custody
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Poppins !important',
-                      fontStyle: 'normal !important',
-                      fontWeight: 400,
-                      fontSize: '11px !important',
-                      lineHeight: '15px !important',
-                      letterSpacing: ' 0.02em !important',
-                      color: '#B4B4B8 !important'
-                    }}
-                  >
-                    Delegate your assets custody
-                  </Typography>
-                </Box>
-              </Box>
-              <Box display="flex" alignItems="flex-start" gap={1} marginTop={2}>
-                <Box
-                  sx={{ color: 'red' }}
-                  component="img"
-                  src={themeMode === 'dark' ? '/static/kyc.svg' : '/static/kyc-dark.svg'}
-                  width="30px !important"
-                />
-                <Box>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Poppins !important',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      fontSize: '12px  !important',
-                      lineHeight: '16px  !important',
-                      letterSpacing: ' 0.02em  !important'
-                    }}
-                  >
-                    Identity Verification
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Poppins !important',
-                      fontStyle: 'normal !important',
-                      fontWeight: 400,
-                      fontSize: '11px !important',
-                      lineHeight: '15px !important',
-                      letterSpacing: ' 0.02em !important',
-                      color: '#B4B4B8 !important',
-                      maxWidth: '120px'
-                    }}
-                  >
-                    Increase the security of your account
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid item xs={6} md={6}>
-              <Box component="img" src="/static/drop-img.png" width="100%" sx={{ borderRadius: '10px' }} />
-              <Typography
-                sx={{
-                  fontFamily: 'Poppins !important',
-                  fontStyle: 'normal !important',
-                  fontWeight: '400 !important',
-                  fontSize: '11px !important',
-                  marginTop: '10px !important',
-                  lineHeight: '15px !important',
-                  letterSpacing: ' 0.02em !important',
-                  textAlign: 'center !important'
-                }}
-              >
-                Sign up to access more features
-              </Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  marginTop: 1,
-                  justifyContent: 'space-between',
-                  flexDirection: 'row'
-                }}
-              >
-                {isLogin ? (
-                  <Button
-                    variant="contained"
-                    onClick={proceedKyc}
-                    className="bto"
-                    sx={{
-                      fontSize: { xs: '10px', md: '12px' },
-                      fontFamily: 'Poppins',
-                      width: { xs: 'auto', md: 'auto' },
-                      fontWeight: 500,
-                      borderRadius: '8px',
-                      minWidth: 'unset  !important',
-                      boxShadow: 'none',
-                      background: themeMode === 'dark' ? 'white' : 'black',
-                      color: themeMode === 'dark' ? 'black' : 'white',
-                      padding: '5px 10px !important',
-                      '&:hover': {
-                        background: themeMode === 'dark' ? 'white' : 'black',
-                        opacity: '80%'
-                      },
-                      position: 'relative'
-                    }}
-                  >
-                    KYC
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    href="/auth/register"
-                    className="bto"
-                    sx={{
-                      fontSize: { xs: '10px', md: '12px' },
-                      fontFamily: 'Poppins',
-                      minWidth: 'unset  !important',
-                      width: { xs: 'auto', md: 'auto' },
-                      fontWeight: 500,
-                      borderRadius: '8px',
-                      boxShadow: 'none',
-                      background: themeMode === 'dark' ? 'white' : 'black',
-                      color: themeMode === 'dark' ? 'black' : 'white',
-                      padding: '5px 10px !important',
-                      '&:hover': {
-                        background: themeMode === 'dark' ? 'white' : 'black',
-                        opacity: '80%'
-                      }
-                    }}
-                  >
-                    Sign up
-                  </Button>
-                )}
-
-                <Button
-                  variant="contained"
-                  href={isLogin ? 'app.equityswap.io/custody' : '/auth/login'}
-                  className="bto"
-                  sx={{
-                    fontSize: { xs: '10px', md: '12px' },
-                    fontFamily: 'Poppins',
-                    width: { xs: 'auto', md: 'auto' },
-                    minWidth: 'unset  !important',
-                    fontWeight: 500,
-                    borderRadius: '8px',
-                    boxShadow: 'none',
-                    background: themeMode === 'dark' ? 'white' : 'black',
-                    color: themeMode === 'dark' ? 'black' : 'white',
-                    padding: '5px 10px',
-                    '&:hover': {
-                      background: themeMode === 'dark' ? 'white' : 'black',
-                      opacity: '80%'
-                    }
-                  }}
-                >
-                  {isLogin ? 'Custody' : 'Login'}
-                </Button>
-                {isLogin && (
-                  <Button
-                    variant="contained"
-                    onClick={async () => {
-                      setIsLogin(false);
-                      window.localStorage.removeItem('user_data');
-                      const user = UserPool.getCurrentUser();
-                      if (user) {
-                        user.signOut();
-                      }
-                    }}
-                    href="#"
-                    className="bto"
-                    sx={{
-                      fontSize: { xs: '10px', md: '12px' },
-                      fontFamily: 'Poppins',
-                      width: { xs: 'auto', md: 'auto' },
-                      fontWeight: 500,
-                      minWidth: '30px !important',
-                      borderRadius: '8px',
-                      boxShadow: 'none',
-                      background: themeMode === 'dark' ? 'white' : 'black',
-                      color: themeMode === 'dark' ? 'black' : 'white',
-                      padding: '5px 5px',
-                      '&:hover': {
-                        background: themeMode === 'dark' ? 'white' : 'black',
-                        opacity: '80%'
-                      }
-                    }}
-                  >
-                    <Icon icon={logoutBtn} fontSize={18} style={{ cursor: 'pointer' }} />
-                  </Button>
-                )}
-              </Box>
-              {verified && (
-                <Box
+                <Typography
                   style={{
-                    background: '#fff',
-                    borderRadius: '5px',
-                    padding: '5px',
-                    fontSize: '14px',
-                    minWidth: 'unset  !important',
-                    color: '#000',
-                    marginTop: '10px',
-                    textAlign: 'center'
+                    fontFamily: 'Public Sans !important',
+                    fontWeight: '400 !important',
+                    fontSize: '1rem !important',
+                    lineHeight: '1.5 !important'
                   }}
                 >
-                  You are verified{' '}
-                  <Icon icon={tick} fontSize={18} style={{ marginLeft: 1, color: 'green', marginBottom: '-3px' }} />
+                  Features
+                </Typography>
+                <Box marginTop={2} display="flex" alignItems="flex-start" gap={1}>
+                  <Box
+                    sx={{ color: 'red' }}
+                    component="img"
+                    src={themeMode === 'dark' ? '/static/safe.svg' : '/static/safe-dark.svg'}
+                    width="30px !important"
+                  />
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontFamily: 'Poppins !important',
+                        fontStyle: 'normal !important',
+                        fontWeight: 400,
+                        fontSize: '12px !important',
+                        lineHeight: '16px !important',
+                        letterSpacing: ' 0.02em !important'
+                      }}
+                    >
+                      Asset Custody
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'Poppins !important',
+                        fontStyle: 'normal !important',
+                        fontWeight: 400,
+                        fontSize: '11px !important',
+                        lineHeight: '15px !important',
+                        letterSpacing: ' 0.02em !important',
+                        color: '#B4B4B8 !important'
+                      }}
+                    >
+                      Delegate your assets custody
+                    </Typography>
+                  </Box>
                 </Box>
-              )}
+                <Box display="flex" alignItems="flex-start" gap={1} marginTop={2}>
+                  <Box
+                    sx={{ color: 'red' }}
+                    component="img"
+                    src={themeMode === 'dark' ? '/static/kyc.svg' : '/static/kyc-dark.svg'}
+                    width="30px !important"
+                  />
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontFamily: 'Poppins !important',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        fontSize: '12px  !important',
+                        lineHeight: '16px  !important',
+                        letterSpacing: ' 0.02em  !important'
+                      }}
+                    >
+                      Identity Verification
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: 'Poppins !important',
+                        fontStyle: 'normal !important',
+                        fontWeight: 400,
+                        fontSize: '11px !important',
+                        lineHeight: '15px !important',
+                        letterSpacing: ' 0.02em !important',
+                        color: '#B4B4B8 !important',
+                        maxWidth: '120px'
+                      }}
+                    >
+                      Increase the security of your account
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={6}>
+                <Box component="img" src="/static/drop-img.png" width="100%" sx={{ borderRadius: '10px' }} />
+                <Typography
+                  sx={{
+                    fontFamily: 'Poppins !important',
+                    fontStyle: 'normal !important',
+                    fontWeight: '400 !important',
+                    fontSize: '11px !important',
+                    marginTop: '10px !important',
+                    lineHeight: '15px !important',
+                    letterSpacing: ' 0.02em !important',
+                    textAlign: 'center !important'
+                  }}
+                >
+                  Sign up to access more features
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    marginTop: 1,
+                    justifyContent: 'space-between',
+                    flexDirection: 'row'
+                  }}
+                >
+                  {isLogin ? (
+                    <Button
+                      variant="contained"
+                      onClick={proceedKyc}
+                      className="bto"
+                      sx={{
+                        fontSize: { xs: '10px', md: '12px' },
+                        fontFamily: 'Poppins',
+                        width: { xs: 'auto', md: 'auto' },
+                        fontWeight: 500,
+                        borderRadius: '8px',
+                        minWidth: 'unset  !important',
+                        boxShadow: 'none',
+                        background: themeMode === 'dark' ? 'white' : 'black',
+                        color: themeMode === 'dark' ? 'black' : 'white',
+                        padding: '5px 10px !important',
+                        '&:hover': {
+                          background: themeMode === 'dark' ? 'white' : 'black',
+                          opacity: '80%'
+                        },
+                        position: 'relative'
+                      }}
+                    >
+                      KYC
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      href="/auth/register"
+                      className="bto"
+                      sx={{
+                        fontSize: { xs: '10px', md: '12px' },
+                        fontFamily: 'Poppins',
+                        minWidth: 'unset  !important',
+                        width: { xs: 'auto', md: 'auto' },
+                        fontWeight: 500,
+                        borderRadius: '8px',
+                        boxShadow: 'none',
+                        background: themeMode === 'dark' ? 'white' : 'black',
+                        color: themeMode === 'dark' ? 'black' : 'white',
+                        padding: '5px 10px !important',
+                        '&:hover': {
+                          background: themeMode === 'dark' ? 'white' : 'black',
+                          opacity: '80%'
+                        }
+                      }}
+                    >
+                      Sign up
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="contained"
+                    href={isLogin ? 'app.equityswap.io/custody' : '/auth/login'}
+                    className="bto"
+                    sx={{
+                      fontSize: { xs: '10px', md: '12px' },
+                      fontFamily: 'Poppins',
+                      width: { xs: 'auto', md: 'auto' },
+                      minWidth: 'unset  !important',
+                      fontWeight: 500,
+                      borderRadius: '8px',
+                      boxShadow: 'none',
+                      background: themeMode === 'dark' ? 'white' : 'black',
+                      color: themeMode === 'dark' ? 'black' : 'white',
+                      padding: '5px 10px',
+                      '&:hover': {
+                        background: themeMode === 'dark' ? 'white' : 'black',
+                        opacity: '80%'
+                      }
+                    }}
+                  >
+                    {isLogin ? 'Custody' : 'Login'}
+                  </Button>
+                  {isLogin && (
+                    <Button
+                      variant="contained"
+                      onClick={async () => {
+                        setIsLogin(false);
+                        window.localStorage.removeItem('user_data');
+                        const user = UserPool.getCurrentUser();
+                        if (user) {
+                          user.signOut();
+                        }
+                      }}
+                      href="#"
+                      className="bto"
+                      sx={{
+                        fontSize: { xs: '10px', md: '12px' },
+                        fontFamily: 'Poppins',
+                        width: { xs: 'auto', md: 'auto' },
+                        fontWeight: 500,
+                        minWidth: '30px !important',
+                        borderRadius: '8px',
+                        boxShadow: 'none',
+                        background: themeMode === 'dark' ? 'white' : 'black',
+                        color: themeMode === 'dark' ? 'black' : 'white',
+                        padding: '5px 5px',
+                        '&:hover': {
+                          background: themeMode === 'dark' ? 'white' : 'black',
+                          opacity: '80%'
+                        }
+                      }}
+                    >
+                      <Icon icon={logoutBtn} fontSize={18} style={{ cursor: 'pointer' }} />
+                    </Button>
+                  )}
+                </Box>
+                {verified && (
+                  <Box
+                    style={{
+                      background: '#fff',
+                      borderRadius: '5px',
+                      padding: '5px',
+                      fontSize: '14px',
+                      minWidth: 'unset  !important',
+                      color: '#000',
+                      marginTop: '10px',
+                      textAlign: 'center'
+                    }}
+                  >
+                    You are verified{' '}
+                    <Icon icon={tick} fontSize={18} style={{ marginLeft: 1, color: 'green', marginBottom: '-3px' }} />
+                  </Box>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-        )}
-      </Box> : ""}
+          )}
+        </Box> 
+      </MHidden> : ""}
       {!isConnectedToPeraWallet ? (
         <>
           <MHidden width="smDown">
