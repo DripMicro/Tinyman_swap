@@ -8,8 +8,7 @@ import Swap from './Swap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: 0,
-    width: '450px',
+    paddingBottom: '20px',
     marginBottom: 50
   },
   media: {
@@ -36,10 +35,10 @@ export default function CardSwap(props) {
   const { themeMode } = useSettings();
   const classes = useStyles();
   return (
-    <Card className={classes.root} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
+    <div className={classes.root}>
       <div className="widget_parent">
         <Swap pera={props.pera} address={props.address} setAddress={props.setAddress} />
       </div>
-    </Card>
+    </div>
   );
 }

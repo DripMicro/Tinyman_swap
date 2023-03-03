@@ -9,6 +9,7 @@ import List from '@material-ui/core/List';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import Card from '@material-ui/core/Card';
 import { Box, Typography, MenuItem, Tooltip } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
@@ -60,14 +61,18 @@ const useStyles = makeStyles((theme) => ({
     color: blue[600]
   },
   label: {
-    paddingTop: theme.spacing(3),
-    paddingLeft: theme.spacing(4)
+    paddingBottom: theme.spacing(3),
+    marginLeft: 10
   },
   label1: {
-    paddingLeft: theme.spacing(4)
+    paddingBottom: theme.spacing(3),
+    marginLeft: 10
   },
   assets: {
-    padding: theme.spacing(1)
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1)
   },
   assetInput: {
     textAlign: 'right',
@@ -96,7 +101,26 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '30px'
   },
   assetBalance: {
-    marginLeft: '20px'
+    marginLeft: '10px'
+  },
+  cardRoot: {
+    padding: 0,
+    width: '450px',
+    marginBottom: 15
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%'
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest
+    })
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)'
   }
 }));
 
@@ -351,100 +375,105 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
         </Grid>
       </Grid>
       {/* Asset1 */}
-      <Grid container className={classes.assets}>
-        <Grid item xs>
-          <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset1}>
-            <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
-              <Box display="flex" alignItems="center">
-                <Box
-                  component="img"
-                  src={`https://asa-list.tinyman.org/assets/${selectedAsset1TokenNumber}/icon.png`}
-                  alt="Asset logo"
-                  sx={{
-                    mr: 2,
-                    width: 40,
-                    height: 40
-                  }}
-                />
-                <Box>
-                  <Box display="flex" alignItems="center" gap={1}>
-                    <Typography variant="subtitle1" noWrap>
-                      {selectedAsset1TokenName}
-                    </Typography>
-                    <Tooltip title="Trusted asset by Pera" arrow>
-                      <Box
-                        component="img"
-                        src="/static/token/trust.svg"
-                        alt="Asset logo"
-                        sx={{
-                          width: 16,
-                          height: 16
-                        }}
-                      />
-                    </Tooltip>
+      <Card className={classes.cardRoot} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
+        <div className="widget_parent">
+          <Grid container className={classes.assets}>
+            <Grid item xs>
+              <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset1}>
+                <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
+                  <Box display="flex" alignItems="center">
+                    <Box
+                      component="img"
+                      src={`https://asa-list.tinyman.org/assets/${selectedAsset1TokenNumber}/icon.png`}
+                      alt="Asset logo"
+                      sx={{
+                        mr: 2,
+                        width: 40,
+                        height: 40
+                      }}
+                    />
+                    <Box>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="subtitle1" noWrap>
+                          {selectedAsset1TokenName}
+                        </Typography>
+                        <Tooltip title="Trusted asset by Pera" arrow>
+                          <Box
+                            component="img"
+                            src="/static/token/trust.svg"
+                            alt="Asset logo"
+                            sx={{
+                              width: 16,
+                              height: 16
+                            }}
+                          />
+                        </Tooltip>
+                      </Box>
+                      {matches ? (
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
+                        </Typography>
+                      ) : (
+                        ''
+                      )}
+                    </Box>
                   </Box>
-                  {matches ? (
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
-                    </Typography>
+                  {!matches ? (
+                    <Box>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                        ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
+                      </Typography>
+                    </Box>
                   ) : (
                     ''
                   )}
                 </Box>
-              </Box>
-              {!matches ? (
-                <Box>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                    ${selectedAsset1TokenUnitName} - {selectedAsset1TokenNumber}
-                  </Typography>
-                </Box>
-              ) : (
-                ''
-              )}
-            </Box>
-          </MenuItem>
-          {address && address.length > 0 ? (
-            <Typography className={classes.assetBalance} variant="body1" sx={{ color: 'text.secondary' }} noWrap>
-              Balance: {assetBalance1} {selectedAsset1TokenUnitName}
-            </Typography>
-          ) : (
-            ''
-          )}
-          <SelectTokenDialog
-            selectedAssetTokenName={selectedAsset1TokenName}
-            selectedAssetTokenNumber={selectedAsset1TokenNumber}
-            selectedAssetTokenUnitName={selectedAsset1TokenUnitName}
-            selectedAssetTokenDecimal={selectedAsset1TokenDecimal}
-            open={openAsset1}
-            onClose={asset1HandleClose}
-          />
-        </Grid>
-        {matches ? (
-          <Grid item direction="row" justifyContent="flex-end">
-            <input
-              type="number"
-              pattern="[0-9]*"
-              className={classes.assetInput}
-              placeholder="0.00"
-              value={assetAmount1}
-              onChange={handleAsset1AmountChange}
-              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
-            />
+              </MenuItem>
+
+              <SelectTokenDialog
+                selectedAssetTokenName={selectedAsset1TokenName}
+                selectedAssetTokenNumber={selectedAsset1TokenNumber}
+                selectedAssetTokenUnitName={selectedAsset1TokenUnitName}
+                selectedAssetTokenDecimal={selectedAsset1TokenDecimal}
+                open={openAsset1}
+                onClose={asset1HandleClose}
+              />
+            </Grid>
+            {matches ? (
+              <Grid item direction="row" justifyContent="flex-end">
+                <input
+                  type="number"
+                  pattern="[0-9]*"
+                  className={classes.assetInput}
+                  placeholder="0.00"
+                  value={assetAmount1}
+                  onChange={handleAsset1AmountChange}
+                  style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+                />
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <input
+                  type="number"
+                  pattern="[0-9]*"
+                  className={classes.assetInputMobile}
+                  placeholder="0.00"
+                  value={assetAmount1}
+                  onChange={handleAsset1AmountChange}
+                  style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+                />
+              </Grid>
+            )}
           </Grid>
-        ) : (
-          <Grid item xs={12}>
-            <input
-              type="number"
-              pattern="[0-9]*"
-              className={classes.assetInputMobile}
-              placeholder="0.00"
-              value={assetAmount1}
-              onChange={handleAsset1AmountChange}
-              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
-            />
-          </Grid>
-        )}
-      </Grid>
+        </div>
+      </Card>
+      {address && address.length > 0 ? (
+        <Typography className={classes.assetBalance} variant="body1" sx={{ color: 'text.secondary' }} noWrap>
+          Balance: {assetBalance1} {selectedAsset1TokenUnitName}
+        </Typography>
+      ) : (
+        ''
+      )}
 
       <Grid container>
         <Grid item xs className={classes.smallIcon}>
@@ -460,100 +489,106 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
         </Grid>
       </Grid>
       {/* Asset2 */}
-      <Grid container className={classes.assets}>
-        <Grid item xs>
-          <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset2}>
-            <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
-              <Box display="flex" alignItems="center">
-                <Box
-                  component="img"
-                  src={`https://asa-list.tinyman.org/assets/${selectedAsset2TokenNumber}/icon.png`}
-                  alt="Asset logo"
-                  sx={{
-                    mr: 2,
-                    width: 40,
-                    height: 40
-                  }}
-                />
-                <Box>
-                  <Box display="flex" alignItems="center" gap={1}>
-                    <Typography variant="subtitle1" noWrap>
-                      {selectedAsset2TokenName}
-                    </Typography>
-                    <Tooltip title="Trusted asset by Pera" arrow>
-                      <Box
-                        component="img"
-                        src="/static/token/trust.svg"
-                        alt="Asset logo"
-                        sx={{
-                          width: 16,
-                          height: 16
-                        }}
-                      />
-                    </Tooltip>
+      <Card className={classes.cardRoot} style={{ background: themeMode === 'dark' ? '#232323' : '#fff' }}>
+        <div className="widget_parent">
+          <Grid container className={classes.assets}>
+            <Grid item xs>
+              <MenuItem sx={{ typography: 'body2', py: 1, px: 2.5 }} onClick={handleClickOpenAsset2}>
+                <Box display="flex" alignItems="center" justifyContent="space-between" flexGrow={1}>
+                  <Box display="flex" alignItems="center">
+                    <Box
+                      component="img"
+                      src={`https://asa-list.tinyman.org/assets/${selectedAsset2TokenNumber}/icon.png`}
+                      alt="Asset logo"
+                      sx={{
+                        mr: 2,
+                        width: 40,
+                        height: 40
+                      }}
+                    />
+                    <Box>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="subtitle1" noWrap>
+                          {selectedAsset2TokenName}
+                        </Typography>
+                        <Tooltip title="Trusted asset by Pera" arrow>
+                          <Box
+                            component="img"
+                            src="/static/token/trust.svg"
+                            alt="Asset logo"
+                            sx={{
+                              width: 16,
+                              height: 16
+                            }}
+                          />
+                        </Tooltip>
+                      </Box>
+                      {matches ? (
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
+                        </Typography>
+                      ) : (
+                        ''
+                      )}
+                    </Box>
                   </Box>
-                  {matches ? (
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
-                    </Typography>
+                  {!matches ? (
+                    <Box>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                        ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
+                      </Typography>
+                    </Box>
                   ) : (
                     ''
                   )}
                 </Box>
-              </Box>
-              {!matches ? (
-                <Box>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                    ${selectedAsset2TokenUnitName} - {selectedAsset2TokenNumber}
-                  </Typography>
-                </Box>
-              ) : (
-                ''
-              )}
-            </Box>
-          </MenuItem>
-          {address && address.length > 0 ? (
-            <Typography className={classes.assetBalance} variant="body1" sx={{ color: 'text.secondary' }} noWrap>
-              Balance: {assetBalance2} {selectedAsset2TokenUnitName}
-            </Typography>
-          ) : (
-            ''
-          )}
-          <SelectTokenDialog
-            selectedAssetTokenName={selectedAsset2TokenName}
-            selectedAssetTokenNumber={selectedAsset2TokenNumber}
-            selectedAssetTokenUnitName={selectedAsset2TokenUnitName}
-            selectedAssetTokenDecimal={selectedAsset2TokenDecimal}
-            open={openAsset2}
-            onClose={asset2HandleClose}
-          />
-        </Grid>
-        {matches ? (
-          <Grid item direction="row" justifyContent="flex-end">
-            <input
-              type="number"
-              pattern="[0-9]*"
-              className={classes.assetInput}
-              placeholder="0.00"
-              value={assetAmount2}
-              onChange={handleAsset2AmountChange}
-              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
-            />
+              </MenuItem>
+
+              <SelectTokenDialog
+                selectedAssetTokenName={selectedAsset2TokenName}
+                selectedAssetTokenNumber={selectedAsset2TokenNumber}
+                selectedAssetTokenUnitName={selectedAsset2TokenUnitName}
+                selectedAssetTokenDecimal={selectedAsset2TokenDecimal}
+                open={openAsset2}
+                onClose={asset2HandleClose}
+              />
+            </Grid>
+            {matches ? (
+              <Grid item direction="row" justifyContent="flex-end">
+                <input
+                  type="number"
+                  pattern="[0-9]*"
+                  className={classes.assetInput}
+                  placeholder="0.00"
+                  value={assetAmount2}
+                  onChange={handleAsset2AmountChange}
+                  style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+                />
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <input
+                  type="number"
+                  pattern="[0-9]*"
+                  className={classes.assetInputMobile}
+                  placeholder="0.00"
+                  value={assetAmount2}
+                  onChange={handleAsset2AmountChange}
+                  style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
+                />
+              </Grid>
+            )}
           </Grid>
-        ) : (
-          <Grid item xs={12}>
-            <input
-              type="number"
-              pattern="[0-9]*"
-              className={classes.assetInputMobile}
-              placeholder="0.00"
-              value={assetAmount2}
-              onChange={handleAsset2AmountChange}
-              style={{ color: themeMode === 'dark' ? 'white' : '#232323' }}
-            />
-          </Grid>
-        )}
-      </Grid>
+        </div>
+      </Card>
+
+      {address && address.length > 0 ? (
+        <Typography className={classes.assetBalance} variant="body1" sx={{ color: 'text.secondary' }} noWrap>
+          Balance: {assetBalance2} {selectedAsset2TokenUnitName}
+        </Typography>
+      ) : (
+        ''
+      )}
 
       <Grid container>
         <Grid item xs className={classes.connectButton}>
