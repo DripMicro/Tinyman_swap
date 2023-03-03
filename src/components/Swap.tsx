@@ -105,7 +105,6 @@ const useStyles = makeStyles((theme) => ({
   },
   cardRoot: {
     padding: 0,
-    width: '450px',
     marginBottom: 15
   },
   media: {
