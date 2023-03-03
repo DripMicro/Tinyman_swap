@@ -443,7 +443,6 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               <Grid item direction="row" justifyContent="flex-end">
                 <input
                   type="number"
-                  pattern="[0-9]*"
                   className={classes.assetInput}
                   placeholder="0.00"
                   value={assetAmount1}
@@ -455,7 +454,6 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               <Grid item xs={12}>
                 <input
                   type="number"
-                  pattern="[0-9]*"
                   className={classes.assetInputMobile}
                   placeholder="0.00"
                   value={assetAmount1}
@@ -557,7 +555,6 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               <Grid item direction="row" justifyContent="flex-end">
                 <input
                   type="number"
-                  pattern="[0-9]*"
                   className={classes.assetInput}
                   placeholder="0.00"
                   value={assetAmount2}
@@ -569,7 +566,6 @@ export default function Swap(props: { pera: PeraWalletConnect; address: string; 
               <Grid item xs={12}>
                 <input
                   type="number"
-                  pattern="[0-9]*"
                   className={classes.assetInputMobile}
                   placeholder="0.00"
                   value={assetAmount2}
